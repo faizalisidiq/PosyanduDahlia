@@ -15,14 +15,14 @@
             <h2 class="text-lg font-bold text-gray-800">Form Tambah Anak</h2>
             <p class="text-sm text-gray-500">Isi informasi untuk mendaftarkan anak baru.</p>
         </div>
-        
+
         <form action="{{ route('childrens.store') }}" method="POST" class="p-6 space-y-8" autocomplete="off">
             @csrf
 
             <!-- Child Identity Section -->
             <div class="space-y-4">
                 <h3 class="text-sm font-semibold text-teal-700 uppercase tracking-wider border-b border-gray-100 pb-2">Data Anak</h3>
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Identity Number Field (NIK) -->
                     <div class="w-full">
@@ -98,10 +98,29 @@
 
                      <!-- Birth Weight Field -->
                     <div class="w-full">
-                        <label for="birth_weight" class="block text-sm font-medium text-gray-700 mb-1">Berat Lahir (kg) <span class="text-red-500">*</span></label>
-                        <input type="text" name="birth_weight" id="birth_weight" value="{{ old('birth_weight') }}" required
+                        <label for="birth_weight" class="block text-sm font-medium text-gray-700 mb-1">
+                            Berat Lahir (kg) <span class="text-red-500">*</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            name="birth_weight"
+                            id="birth_weight"
+                            value="{{ old('birth_weight', $children->birth_weight ?? '') }}"
+                            required
                             class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-sm p-2.5 transition-all @error('birth_weight') border-red-500 bg-red-50 @enderror"
-                            placeholder="Contoh: 3.5">
+                            placeholder="Contoh: 3.5"
+                        >
+
+                        <button
+                            type="button"
+                            id="getWeightButton"
+                            class="mt-2 px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all"
+                        >
+                            Ambil Berat dari IoT
+                        </button>
+
                         @error('birth_weight')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -110,12 +129,15 @@
                      <!-- Birth Height Field -->
                     <div class="w-full">
                         <label for="birth_height" class="block text-sm font-medium text-gray-700 mb-1">Tinggi Lahir (cm) <span class="text-red-500">*</span></label>
-                        <input type="text" name="birth_height" id="birth_height" value="{{ old('birth_height') }}" required
+                        <input type="number" step="0.01" name="birth_height" id="birth_height" value="{{ old('birth_height', $children->birth_height ?? '') }}" required
                             class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-sm p-2.5 transition-all @error('birth_height') border-red-500 bg-red-50 @enderror"
                             placeholder="Contoh: 50">
-                        @error('birth_height')
+                            <button type="button" id="getHeightButton" class="mt-2 px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
+                                Ambil Tinggi dari IoT
+                            </button>
+                            @error('birth_height')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                            @enderror
                     </div>
 
                     <!-- BPJS Facility Field -->
@@ -148,3 +170,36 @@
     </div>
 </div>
 @endsection
+
+<script>
+    async function getLatestIotMeasurement() {
+        try {
+            const response = await fetch('/api/iot/measurement/latest', {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                const birthHeightInput = document.getElementById('birth_height');
+                const birthWeightInput = document.getElementById('birth_weight');
+
+                if (birthHeightInput) {
+                    birthHeightInput.value = result.data.birth_height;
+                }
+
+                if (birthWeightInput) {
+                    birthWeightInput.value = result.data.birth_weight;
+                }
+
+                console.log('Data IoT terbaru:', result.data);
+            }
+        } catch (error) {
+            console.log('Belum ada data IoT');
+        }
+    }
+
+    setInterval(getLatestIotMeasurement, 2000);
+</script>
