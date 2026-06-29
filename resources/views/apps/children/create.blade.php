@@ -119,7 +119,7 @@
                             <div class="flex flex-wrap items-center gap-2 mt-3">
                                 <button type="button" id="connectScaleButton"
                                     class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
-                                    Hubungkan Timbangan Testing github
+                                    Hubungkan Timbangan Testing
                                 </button>
 
                                 <button type="button" id="disconnectScaleButton"
