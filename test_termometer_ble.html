@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Uji Coba Bluetooth Termometer</title>
+<style>
+  body { font-family: sans-serif; max-width: 500px; margin: 40px auto; padding: 0 16px; }
+  button { padding: 12px 20px; font-size: 16px; cursor: pointer; }
+  #status { margin: 16px 0; padding: 12px; background: #f0f0f0; border-radius: 8px; white-space: pre-wrap; }
+  #suhu { font-size: 48px; font-weight: bold; margin: 16px 0; }
+  #log { font-size: 12px; color: #555; white-space: pre-wrap; background: #fafafa; padding: 8px; border-radius: 6px; }
+</style>
+</head>
+<body>
+  <h2>Uji Coba Termometer Bluetooth (Yuwell YHW-6)</h2>
+  <p>Nyalakan alat termometer, pastikan Bluetooth aktif, lalu klik tombol di bawah.</p>
+
+  <button id="btnConnect">Hubungkan ke Termometer</button>
+
+  <div id="status">Belum terhubung.</div>
+  <div id="suhu"></div>
+  <div id="log"></div>
+
+  <script>
+    const btn = document.getElementById('btnConnect');
+    const statusEl = document.getElementById('status');
+    const suhuEl = document.getElementById('suhu');
+    const logEl = document.getElementById('log');
+
+    function log(msg) {
+      console.log(msg);
+      logEl.textContent += msg + '\n';
+    }
+
+    // Parsing sesuai spesifikasi Bluetooth SIG:
+    // Health Thermometer Service (0x1809)
+    // Characteristic: Temperature Measurement (0x2A1C)
+    function parseTemperatureMeasurement(dataView) {
+      const flags = dataView.getUint8(0);
+      const isFahrenheit = (flags & 0x01) !== 0;
+      const hasTimestamp = (flags & 0x02) !== 0;
+      const hasType = (flags & 0x04) !== 0;
+
+      // IEEE-11073 32-bit FLOAT: 24-bit mantissa (signed) + 8-bit exponent (signed)
+      let mantissa = dataView.getUint8(1) | (dataView.getUint8(2) << 8) | (dataView.getUint8(3) << 16);
+      if (mantissa >= 0x800000) mantissa -= 0x1000000;
+      const exponent = dataView.getInt8(4);
+      const value = mantissa * Math.pow(10, exponent);
+
+      let offset = 5;
+      let timestamp = null;
+      if (hasTimestamp) {
+        timestamp = {
+          year: dataView.getUint16(offset, true),
+          month: dataView.getUint8(offset + 2),
+          day: dataView.getUint8(offset + 3),
+          hours: dataView.getUint8(offset + 4),
+          minutes: dataView.getUint8(offset + 5),
+          seconds: dataView.getUint8(offset + 6),
+        };
+        offset += 7;
+      }
+
+      let tempType = null;
+      if (hasType) {
+        tempType = dataView.getUint8(offset);
+        offset += 1;
+      }
+
+      return { value, unit: isFahrenheit ? 'F' : 'C', timestamp, tempType };
+    }
+
+    async function connect() {
+      try {
+        statusEl.textContent = 'Mencari alat...';
+        logEl.textContent = '';
+
+        const device = await navigator.bluetooth.requestDevice({
+          filters: [{ services: ['health_thermometer'] }]
+        });
+
+        log('Ditemukan: ' + device.name);
+        statusEl.textContent = 'Menyambungkan ke ' + device.name + '...';
+
+        const server = await device.gatt.connect();
+        const service = await server.getPrimaryService('health_thermometer');
+        const characteristic = await service.getCharacteristic('temperature_measurement');
+
+        await characteristic.startNotifications();
+        statusEl.textContent = 'Terhubung. Menunggu hasil pengukuran dari alat...';
+
+        characteristic.addEventListener('characteristicvaluechanged', (event) => {
+          const result = parseTemperatureMeasurement(event.target.value);
+          suhuEl.textContent = result.value.toFixed(1) + '°' + result.unit;
+          log('Data mentah diterima, hasil parsing: ' + JSON.stringify(result));
+
+          // TODO: setelah ini terbukti jalan, ganti bagian bawah ini
+          // dengan pengiriman ke endpoint Laravel, contoh:
+          //
+          // fetch('http://localhost:8000/api/vitals/suhu', {
+          //   method: 'POST',
+          //   headers: { 'Content-Type': 'application/json' },
+          //   body: JSON.stringify({
+          //     suhu: result.value,
+          //     satuan: result.unit,
+          //     waktu: new Date().toISOString()
+          //   })
+          // });
+        });
+
+        device.addEventListener('gattserverdisconnected', () => {
+          statusEl.textContent = 'Koneksi terputus. Klik tombol untuk sambung ulang.';
+        });
+
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = 'Gagal: ' + err.message
+          + '\n\nKemungkinan penyebab: alat tidak memakai profil Health Thermometer standar (0x1809), atau browser tidak mendukung Web Bluetooth (pakai Chrome/Edge di desktop atau Android).';
+      }
+    }
+
+    btn.addEventListener('click', connect);
+  </script>
+</body>
+</html>

@@ -153,6 +153,36 @@
                             @enderror
                         </div>
 
+                        <!-- Temperature Field -->
+                        <div class="w-full">
+                            <label for="temperature" class="block text-sm font-medium text-gray-700 mb-1">
+                                Suhu Tubuh (°C) <span class="text-xs text-gray-500">(Opsional)</span>
+                            </label>
+                            <input type="number" step="0.1" name="temperature" id="temperature"
+                                value="{{ old('temperature') }}"
+                                class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-sm p-2.5 transition-all @error('temperature') border-red-500 bg-red-50 @enderror"
+                                placeholder="Contoh: 36.5">
+                        <span id="suhuStatusBadge" class="hidden"></span>
+
+                            <div class="flex flex-wrap items-center gap-2 mt-3">
+                                <button type="button" id="connectThermometerButton"
+                                    class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
+                                    Hubungkan Termometer
+                                </button>
+                                <button type="button" id="disconnectThermometerButton"
+                                    class="hidden px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all">
+                                    Putuskan Termometer
+                                </button>
+                                <span id="thermometerStatus" class="text-sm text-gray-500">
+                                    Termometer belum terhubung
+                                </span>
+                            </div>
+
+                            @error('temperature')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <!-- BPJS Facility Field -->
                         <div class="w-full">
                             <label for="bpjs_facility" class="block text-sm font-medium text-gray-700 mb-1">Faskes (BPJS)
@@ -193,7 +223,15 @@
     src="{{ asset('js/scale.js') }}?v={{ filemtime(public_path('js/scale.js')) }}"
     defer
 ></script>
+<script
+    src="{{ asset('js/thermometer.js') }}?v={{ filemtime(public_path('js/thermometer.js')) }}"
+    defer
+></script>
 
+<script
+    src="{{ asset('js/vital-status.js') }}?v={{ filemtime(public_path('js/vital-status.js')) }}"
+    defer
+></script>
 {{-- <script>
     async function getLatestIotMeasurement() {
         try {

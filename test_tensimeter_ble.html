@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Uji Coba Bluetooth Tensimeter</title>
+<style>
+  body { font-family: sans-serif; max-width: 500px; margin: 40px auto; padding: 0 16px; }
+  button { padding: 12px 20px; font-size: 16px; cursor: pointer; }
+  #status { margin: 16px 0; padding: 12px; background: #f0f0f0; border-radius: 8px; white-space: pre-wrap; }
+  #hasil { font-size: 32px; font-weight: bold; margin: 16px 0; }
+  #log { font-size: 12px; color: #555; white-space: pre-wrap; background: #fafafa; padding: 8px; border-radius: 6px; }
+</style>
+</head>
+<body>
+  <h2>Uji Coba Tensimeter Bluetooth (Omron HEM-7140T)</h2>
+  <p>Nyalakan alat tensimeter, pastikan Bluetooth aktif, lalu klik tombol di bawah.</p>
+
+  <button id="btnConnect">Hubungkan ke Tensimeter</button>
+
+  <div id="status">Belum terhubung.</div>
+  <div id="hasil"></div>
+  <div id="log"></div>
+
+  <script>
+    const btn = document.getElementById('btnConnect');
+    const statusEl = document.getElementById('status');
+    const hasilEl = document.getElementById('hasil');
+    const logEl = document.getElementById('log');
+
+    function log(msg) {
+      console.log(msg);
+      logEl.textContent += msg + '\n';
+    }
+
+    // Parsing IEEE-11073 16-bit SFLOAT (dipakai di Blood Pressure Measurement)
+    function parseSFLOAT(rawUint16) {
+      let mantissa = rawUint16 & 0x0FFF;
+      let exponent = (rawUint16 >> 12) & 0x0F;
+
+      if (mantissa >= 0x0800) mantissa -= 0x1000; // sign-extend 12-bit
+      if (exponent >= 0x08) exponent -= 0x10;      // sign-extend 4-bit
+
+      return mantissa * Math.pow(10, exponent);
+    }
+
+    // Parsing sesuai spesifikasi Bluetooth SIG:
+    // Blood Pressure Service (0x1810)
+    // Characteristic: Blood Pressure Measurement (0x2A35)
+    function parseBloodPressureMeasurement(dataView) {
+      const flags = dataView.getUint8(0);
+      const isKPa = (flags & 0x01) !== 0;
+      const hasTimestamp = (flags & 0x02) !== 0;
+      const hasPulseRate = (flags & 0x04) !== 0;
+      const hasUserId = (flags & 0x08) !== 0;
+      const hasMeasurementStatus = (flags & 0x10) !== 0;
+
+      let offset = 1;
+
+      const systolic = parseSFLOAT(dataView.getUint16(offset, true)); offset += 2;
+      const diastolic = parseSFLOAT(dataView.getUint16(offset, true)); offset += 2;
+      const map = parseSFLOAT(dataView.getUint16(offset, true)); offset += 2;
+
+      let timestamp = null;
+      if (hasTimestamp) {
+        timestamp = {
+          year: dataView.getUint16(offset, true),
+          month: dataView.getUint8(offset + 2),
+          day: dataView.getUint8(offset + 3),
+          hours: dataView.getUint8(offset + 4),
+          minutes: dataView.getUint8(offset + 5),
+          seconds: dataView.getUint8(offset + 6),
+        };
+        offset += 7;
+      }
+
+      let pulseRate = null;
+      if (hasPulseRate) {
+        pulseRate = parseSFLOAT(dataView.getUint16(offset, true));
+        offset += 2;
+      }
+
+      let userId = null;
+      if (hasUserId) {
+        userId = dataView.getUint8(offset);
+        offset += 1;
+      }
+
+      return {
+        systolic,
+        diastolic,
+        map,
+        unit: isKPa ? 'kPa' : 'mmHg',
+        timestamp,
+        pulseRate,
+        userId
+      };
+    }
+
+    async function connect() {
+      try {
+        statusEl.textContent = 'Mencari alat...';
+        logEl.textContent = '';
+
+        const device = await navigator.bluetooth.requestDevice({
+          filters: [{ services: ['blood_pressure'] }]
+        });
+
+        log('Ditemukan: ' + device.name);
+        statusEl.textContent = 'Menyambungkan ke ' + device.name + '...';
+
+        const server = await device.gatt.connect();
+        const service = await server.getPrimaryService('blood_pressure');
+        const characteristic = await service.getCharacteristic('blood_pressure_measurement');
+
+        await characteristic.startNotifications();
+        statusEl.textContent = 'Terhubung. Menunggu hasil pengukuran dari alat...';
+
+        characteristic.addEventListener('characteristicvaluechanged', (event) => {
+          const result = parseBloodPressureMeasurement(event.target.value);
+          hasilEl.textContent = `${Math.round(result.systolic)}/${Math.round(result.diastolic)} ${result.unit}`
+            + (result.pulseRate ? ` · Nadi: ${Math.round(result.pulseRate)}` : '');
+          log('Data mentah diterima, hasil parsing: ' + JSON.stringify(result));
+        });
+
+        device.addEventListener('gattserverdisconnected', () => {
+          statusEl.textContent = 'Koneksi terputus. Klik tombol untuk sambung ulang.';
+        });
+
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = 'Gagal: ' + err.message
+          + '\n\nKemungkinan penyebab: alat tidak memakai profil Blood Pressure standar (0x1810), atau browser tidak mendukung Web Bluetooth (pakai Chrome/Edge di desktop atau Android).';
+      }
+    }
+
+    btn.addEventListener('click', connect);
+  </script>
+</body>
+</html>

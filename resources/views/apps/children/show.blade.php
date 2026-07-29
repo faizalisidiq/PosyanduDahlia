@@ -89,6 +89,37 @@
                             <p class="text-gray-900 font-medium">{{ $children->birth_height }} cm</p>
                         </div>
                         <div>
+                            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Suhu Tubuh</label>
+                            <p class="text-gray-900 font-medium">
+                                {{ $children->temperature ? number_format($children->temperature, 1) . '°C' : '-' }}
+                            </p>
+                            @php
+                                $suhuStatus = null;
+                                $suhuColor = 'gray';
+                                if ($children->temperature) {
+                                    if ($children->temperature < 35.0) {
+                                        $suhuStatus = 'Suhu Rendah';
+                                        $suhuColor = 'blue';
+                                    } elseif ($children->temperature <= 37.5) {
+                                        $suhuStatus = 'Normal';
+                                        $suhuColor = 'green';
+                                    } else {
+                                        $suhuStatus = 'Demam';
+                                        $suhuColor = 'red';
+                                    }
+                                }
+                                $badgeClasses = [
+                                    'gray'  => 'bg-gray-100 text-gray-500',
+                                    'blue'  => 'bg-blue-100 text-blue-700',
+                                    'green' => 'bg-green-100 text-green-700',
+                                    'red'   => 'bg-red-100 text-red-700',
+                                ];
+                            @endphp
+                            @if($suhuStatus)
+                                <span class="inline-block mt-1 text-xs font-medium px-2 py-0.5 rounded-full {{ $badgeClasses[$suhuColor] }}">{{ $suhuStatus }}</span>
+                            @endif
+                        </div>
+                        <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Faskes (BPJS)</label>
                             <p class="text-gray-900 font-medium">{{ $children->bpjs_facility ?? '-' }}</p>
                         </div>

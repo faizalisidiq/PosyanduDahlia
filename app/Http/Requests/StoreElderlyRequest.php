@@ -32,6 +32,10 @@ class StoreElderlyRequest extends FormRequest
             'social_security_number' => 'nullable|string|max:50',
             'health_facility' => 'nullable|in:Klinik,Puskesmas,RS',
             'blood_type' => 'nullable|string|max:5',
+            'temperature' => 'nullable|numeric|min:30|max:45',
+            'systolic_pressure' => 'nullable|integer|min:60|max:250',
+            'diastolic_pressure' => 'nullable|integer|min:40|max:150',
+            'pulse' => 'nullable|integer|min:30|max:200',
         ];
     }
 }
