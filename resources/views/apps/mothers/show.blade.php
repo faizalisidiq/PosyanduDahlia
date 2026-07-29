@@ -239,12 +239,12 @@
                             }
 
                             $badgeClasses = [
-                                'gray' => 'bg-gray-100 text-gray-500',
-                                'blue' => 'bg-blue-100 text-blue-700',
-                                'green' => 'bg-green-100 text-green-700',
+                                'gray'   => 'bg-gray-100 text-gray-500',
+                                'blue'   => 'bg-blue-100 text-blue-700',
+                                'green'  => 'bg-green-100 text-green-700',
                                 'yellow' => 'bg-yellow-100 text-yellow-700',
                                 'orange' => 'bg-orange-100 text-orange-700',
-                                'red' => 'bg-red-100 text-red-700',
+                                'red'    => 'bg-red-100 text-red-700',
                             ];
                         @endphp
 
@@ -255,10 +255,9 @@
                                     {{ $mother->temperature ? number_format($mother->temperature, 1) . '°C' : '-' }}
                                 </span>
                             </div>
-                            @if ($suhuStatus)
+                            @if($suhuStatus)
                                 <div class="flex justify-end mt-1">
-                                    <span
-                                        class="text-xs font-medium px-2 py-0.5 rounded-full {{ $badgeClasses[$suhuColor] }}">{{ $suhuStatus }}</span>
+                                    <span class="text-xs font-medium px-2 py-0.5 rounded-full {{ $badgeClasses[$suhuColor] }}">{{ $suhuStatus }}</span>
                                 </div>
                             @endif
                         </div>
@@ -267,17 +266,16 @@
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-gray-500">Tekanan Darah</span>
                                 <span class="text-gray-900 font-semibold">
-                                    @if ($mother->systolic_pressure && $mother->diastolic_pressure)
+                                    @if($mother->systolic_pressure && $mother->diastolic_pressure)
                                         {{ $mother->systolic_pressure }}/{{ $mother->diastolic_pressure }} mmHg
                                     @else
                                         -
                                     @endif
                                 </span>
                             </div>
-                            @if ($tensiStatus)
+                            @if($tensiStatus)
                                 <div class="flex justify-end mt-1">
-                                    <span
-                                        class="text-xs font-medium px-2 py-0.5 rounded-full {{ $badgeClasses[$tensiColor] }}">{{ $tensiStatus }}</span>
+                                    <span class="text-xs font-medium px-2 py-0.5 rounded-full {{ $badgeClasses[$tensiColor] }}">{{ $tensiStatus }}</span>
                                 </div>
                             @endif
                         </div>
@@ -457,4 +455,5 @@
             </div>
         </div>
     </div>
+
 @endsection

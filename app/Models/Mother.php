@@ -47,6 +47,8 @@ class Mother extends Model
         'blood_type',
         'height',
         'weight',
+        'temperature',
+        'systolic_pressure', 'diastolic_pressure', 'pulse',
         'status',
     ];
 

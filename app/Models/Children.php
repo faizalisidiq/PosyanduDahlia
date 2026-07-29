@@ -40,6 +40,7 @@ class Children extends Model
         'birth_date',
         'birth_weight',
         'birth_height',
+        'temperature',
         'bpjs_facility',
     ];
 
