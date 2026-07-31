@@ -183,7 +183,7 @@
                                 value="{{ old('temperature') }}"
                                 class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-sm p-2.5 transition-all @error('temperature') border-red-500 bg-red-50 @enderror"
                                 placeholder="Contoh: 36.5">
-                        <span id="suhuStatusBadge" class="hidden"></span>
+                            <span id="suhuStatusBadge" class="hidden"></span>
 
                             <div class="flex flex-wrap items-center gap-2 mt-3">
                                 <button type="button" id="connectThermometerButton"
@@ -242,44 +242,6 @@
 
 <script src="{{ asset('js/scale.js') }}?v={{ filemtime(public_path('js/scale.js')) }}" defer></script>
 <script src="{{ asset('js/iotScale.js') }}?v={{ filemtime(public_path('js/iotScale.js')) }}" defer></script>
-<script
-    src="{{ asset('js/thermometer.js') }}?v={{ filemtime(public_path('js/thermometer.js')) }}"
-    defer
-></script>
+<script src="{{ asset('js/thermometer.js') }}?v={{ filemtime(public_path('js/thermometer.js')) }}" defer></script>
 
-<script
-    src="{{ asset('js/vital-status.js') }}?v={{ filemtime(public_path('js/vital-status.js')) }}"
-    defer
-></script>
-{{-- <script>
-    async function getLatestIotMeasurement() {
-        try {
-            const response = await fetch('/api/iot/measurement/latest', {
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                const birthHeightInput = document.getElementById('birth_height');
-                const birthWeightInput = document.getElementById('birth_weight');
-
-                if (birthHeightInput) {
-                    birthHeightInput.value = result.data.birth_height;
-                }
-
-                if (birthWeightInput) {
-                    birthWeightInput.value = result.data.birth_weight;
-                }
-
-                console.log('Data IoT terbaru:', result.data);
-            }
-        } catch (error) {
-            console.log('Belum ada data IoT');
-        }
-    }
-
-    setInterval(getLatestIotMeasurement, 2000);
-</script> --}}
+<script src="{{ asset('js/vital-status.js') }}?v={{ filemtime(public_path('js/vital-status.js')) }}" defer></script>
