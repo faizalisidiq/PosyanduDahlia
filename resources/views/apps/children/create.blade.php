@@ -150,26 +150,7 @@
                                         Timbangan balita belum terhubung
                                     </span>
                                 </div>
-
                             </div>
-
-                            {{-- Timbangan Balita --}}
-                            {{-- <div class="flex flex-wrap items-center gap-2 mt-3">
-                                <button type="button" id="connectiotScaleButton"
-                                    class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
-                                    Hubungkan Timbangan
-                                </button>
-
-                                <button type="button" id="disconnectiotScaleButton"
-                                    class="hidden px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all"
-                                    style="display:none; background:red !important; color:white !important;">
-                                    Putuskan Timbangan
-                                </button>
-
-                                <span id="scaleStatus" class="text-sm text-gray-500">
-                                    Timbangan belum terhubung
-                                </span>
-                            </div> --}}
 
                             @error('birth_weight')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
