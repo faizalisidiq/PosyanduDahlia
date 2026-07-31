@@ -163,7 +163,105 @@
                     <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
                     <div class="absolute bottom-0 left-0 -mb-4 -ml-4 w-20 h-20 bg-teal-400/20 rounded-full blur-xl"></div>
                 </div>
+
+                <!-- Vital Signs Card -->
+                <div class="bg-white rounded-xl shadow-[0_0_20px_rgba(0,0,0,0.05)] border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="font-bold text-gray-800">Tanda Vital Terakhir</h3>
+                        <p class="text-xs text-gray-500 mt-1">Hasil pengukuran alat.</p>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        @php
+                            $suhuStatus = null;
+                            $suhuColor = 'gray';
+                            if ($mother->temperature) {
+                                if ($mother->temperature < 35.0) {
+                                    $suhuStatus = 'Suhu Rendah';
+                                    $suhuColor = 'blue';
+                                } elseif ($mother->temperature <= 37.5) {
+                                    $suhuStatus = 'Normal';
+                                    $suhuColor = 'green';
+                                } else {
+                                    $suhuStatus = 'Demam';
+                                    $suhuColor = 'red';
+                                }
+                            }
+
+                            $tensiStatus = null;
+                            $tensiColor = 'gray';
+                            if ($mother->systolic_pressure && $mother->diastolic_pressure) {
+                                $sys = $mother->systolic_pressure;
+                                $dia = $mother->diastolic_pressure;
+                                if ($sys < 90 || $dia < 60) {
+                                    $tensiStatus = 'Hipotensi';
+                                    $tensiColor = 'blue';
+                                } elseif ($sys < 120 && $dia < 80) {
+                                    $tensiStatus = 'Normal';
+                                    $tensiColor = 'green';
+                                } elseif ($sys < 140 || $dia < 90) {
+                                    $tensiStatus = 'Prahipertensi';
+                                    $tensiColor = 'yellow';
+                                } elseif ($sys < 160 || $dia < 100) {
+                                    $tensiStatus = 'Hipertensi Tingkat 1';
+                                    $tensiColor = 'orange';
+                                } else {
+                                    $tensiStatus = 'Hipertensi Tingkat 2';
+                                    $tensiColor = 'red';
+                                }
+                            }
+
+                            $badgeClasses = [
+                                'gray'   => 'bg-gray-100 text-gray-500',
+                                'blue'   => 'bg-blue-100 text-blue-700',
+                                'green'  => 'bg-green-100 text-green-700',
+                                'yellow' => 'bg-yellow-100 text-yellow-700',
+                                'orange' => 'bg-orange-100 text-orange-700',
+                                'red'    => 'bg-red-100 text-red-700',
+                            ];
+                        @endphp
+
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-500">Suhu Tubuh</span>
+                                <span class="text-gray-900 font-semibold">
+                                    {{ $mother->temperature ? number_format($mother->temperature, 1) . '°C' : '-' }}
+                                </span>
+                            </div>
+                            @if($suhuStatus)
+                                <div class="flex justify-end mt-1">
+                                    <span class="text-xs font-medium px-2 py-0.5 rounded-full {{ $badgeClasses[$suhuColor] }}">{{ $suhuStatus }}</span>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-500">Tekanan Darah</span>
+                                <span class="text-gray-900 font-semibold">
+                                    @if($mother->systolic_pressure && $mother->diastolic_pressure)
+                                        {{ $mother->systolic_pressure }}/{{ $mother->diastolic_pressure }} mmHg
+                                    @else
+                                        -
+                                    @endif
+                                </span>
+                            </div>
+                            @if($tensiStatus)
+                                <div class="flex justify-end mt-1">
+                                    <span class="text-xs font-medium px-2 py-0.5 rounded-full {{ $badgeClasses[$tensiColor] }}">{{ $tensiStatus }}</span>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-500">Nadi</span>
+                            <span class="text-gray-900 font-semibold">
+                                {{ $mother->pulse ? $mother->pulse . ' bpm' : '-' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 @endsection

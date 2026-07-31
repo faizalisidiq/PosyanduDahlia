@@ -26,6 +26,8 @@ class Elderly extends Model
         'social_security_number',
         'health_facility',
         'blood_type',
+        'temperature',
+        'systolic_pressure', 'diastolic_pressure', 'pulse',
     ];
 
     /**
