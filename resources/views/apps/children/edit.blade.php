@@ -127,8 +127,8 @@
                             @enderror
                         </div>
 
+                        {{-- Timbangan Bayi --}}
                         <div class="flex flex-wrap items-center gap-2 mt-3">
-                            {{-- Timbangan Bayi --}}
                             <button type="button" id="connectScaleButton"
                                 class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
                                 Hubungkan Timbangan Bayi
@@ -143,8 +143,10 @@
                             <span id="scaleStatus" class="text-sm text-gray-500">
                                 Timbangan bayi belum terhubung
                             </span>
+                        </div>
 
-                            {{-- Timbangan Balita --}}
+                        {{-- Timbangan Balita --}}
+                        <div>
                             <div class="flex flex-wrap items-center gap-2 mt-3">
                                 <button type="button" id="connectiotScaleButton"
                                     class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
@@ -162,8 +164,6 @@
                                 </span>
                             </div>
                         </div>
-
-                        <div></div>
 
                         <!-- Temperature Field -->
                         <div class="w-full">

@@ -9,8 +9,12 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     const scaleStatus = document.getElementById("iotscaleStatus");
 
-    const birthHeightInput = document.getElementById("birth_height");
-    const birthWeightInput = document.getElementById("birth_weight");
+    const birthHeightInput =
+        document.getElementById("birth_height") ||
+        document.getElementById("height");
+    const birthWeightInput =
+        document.getElementById("birth_weight") ||
+        document.getElementById("weight");
 
     // UUID Standar untuk BLE ESP32 (Harus sama dengan yang di kode ESP32)
     const bleServiceUUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";

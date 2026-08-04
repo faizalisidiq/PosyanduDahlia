@@ -61,7 +61,8 @@
                                         <option value="{{ $child->id }}"
                                             {{ old('child_id') == $child->id ? 'selected' : '' }}>{{ $child->name }} -
                                             (Ibu:
-                                            {{ $child->mother->name }})</option>
+                                            {{ $child->mother->name }})
+                                        </option>
                                     @endforeach
                                 </select>
                             @endif
@@ -149,6 +150,44 @@
                             @enderror
                         </div>
 
+                        {{-- Timbangan Bayi --}}
+                        <div class="flex flex-wrap items-center gap-2 mt-3">
+                            <button type="button" id="connectScaleButton"
+                                class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
+                                Hubungkan Timbangan Bayi
+                            </button>
+
+                            <button type="button" id="disconnectScaleButton"
+                                class="hidden px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all"
+                                style="background:red !important; color:white !important;">
+                                Putuskan Timbangan Bayi
+                            </button>
+
+                            <span id="scaleStatus" class="text-sm text-gray-500">
+                                Timbangan bayi belum terhubung
+                            </span>
+                        </div>
+
+                        {{-- Timbangan Balita --}}
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2 mt-3">
+                                <button type="button" id="connectiotScaleButton"
+                                    class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
+                                    Hubungkan Timbangan Balita
+                                </button>
+
+                                <button type="button" id="disconnectiotScaleButton"
+                                    class="hidden px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all"
+                                    style="display:none; background:red !important; color:white !important;">
+                                    Putuskan Timbangan Balita
+                                </button>
+
+                                <span id="iotscaleStatus" class="text-sm text-gray-500">
+                                    Timbangan balita belum terhubung
+                                </span>
+                            </div>
+                        </div>
+
                         <!-- Head Circumference -->
                         <div class="w-full">
                             <label for="head_circumference" class="block text-sm font-medium text-gray-700 mb-1">Lingkar
@@ -164,7 +203,8 @@
 
                         <!-- Next Checkup Date -->
                         <div class="w-full">
-                            <label for="next_checkup_date" class="block text-sm font-medium text-gray-700 mb-1">Jadwal Pemeriksaan Berikutnya</label>
+                            <label for="next_checkup_date" class="block text-sm font-medium text-gray-700 mb-1">Jadwal
+                                Pemeriksaan Berikutnya</label>
                             <input type="date" name="next_checkup_date" id="next_checkup_date"
                                 value="{{ old('next_checkup_date') }}"
                                 class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-sm p-2.5 transition-all @error('next_checkup_date') border-red-500 bg-red-50 @enderror">
@@ -223,3 +263,6 @@
         </div>
     </div>
 @endsection
+
+<script src="{{ asset('js/scale.js') }}?v={{ filemtime(public_path('js/scale.js')) }}" defer></script>
+<script src="{{ asset('js/iotScale.js') }}?v={{ filemtime(public_path('js/iotScale.js')) }}" defer></script>
