@@ -221,7 +221,7 @@
                         <div class="flex flex-wrap items-center gap-2 mt-3">
                             <button type="button" id="ambilTensiButton"
                                 class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
-                                Ambil dari Tensimeter
+                                Ambil dari Tensimeter Omron
                             </button>
                             <span id="tensiStatus" class="text-sm text-gray-500">
                                 Belum ada data diambil
@@ -229,6 +229,34 @@
                         </div>
                         <p class="mt-2 text-xs text-gray-400">
                             Ukur tensi di alat, jalankan <code>tensimeter_bridge.py</code> di komputer, baru klik tombol di atas.
+                        </p>
+
+                        <button
+                            type="button"
+                            id="btnConnectTensimeter"
+                            onclick="connectTensimeter()"
+                            class="px-3 py-2 mt-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-all">
+
+                            Hubungkan Tensimeter ESP
+                        </button>
+
+                        <p
+                            id="statusTensimeter"
+                            class="text-xs text-gray-500 mt-2">
+
+                            Belum terhubung
+
+                        </p>
+
+                        <p class="text-xs text-gray-500">
+
+                            Tekanan :
+                            <span id="pressureRealtime">
+
+                                0 mmHg
+
+                            </span>
+
                         </p>
                     </div>
 
@@ -278,6 +306,10 @@
 ></script>
 <script
     src="{{ asset('js/tensimeter.js') }}?v={{ filemtime(public_path('js/tensimeter.js')) }}"
+    defer
+></script>
+<script
+    src="{{ asset('js/tensimeter2.js') }}?v={{ filemtime(public_path('js/tensimeter2.js')) }}"
     defer
 ></script>
 <script
