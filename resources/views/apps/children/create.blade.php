@@ -117,19 +117,39 @@
                                 placeholder="Contoh: 3.5">
 
                             <div class="flex flex-wrap items-center gap-2 mt-3">
+                                {{-- Timbangan Bayi --}}
                                 <button type="button" id="connectScaleButton"
                                     class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
-                                    Hubungkan Timbangan Testing
+                                    Hubungkan Timbangan Bayi
                                 </button>
 
                                 <button type="button" id="disconnectScaleButton"
-                                    class="hidden px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all">
-                                    Putuskan Timbangan
+                                    class="hidden px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all"
+                                    style="background:red !important; color:white !important;">
+                                    Putuskan Timbangan Bayi
                                 </button>
 
                                 <span id="scaleStatus" class="text-sm text-gray-500">
-                                    Timbangan belum terhubung
+                                    Timbangan bayi belum terhubung
                                 </span>
+
+                                {{-- Timbangan Balita --}}
+                                <div class="flex flex-wrap items-center gap-2 mt-3">
+                                    <button type="button" id="connectiotScaleButton"
+                                        class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
+                                        Hubungkan Timbangan Balita
+                                    </button>
+
+                                    <button type="button" id="disconnectiotScaleButton"
+                                        class="hidden px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all"
+                                        style="display:none; background:red !important; color:white !important;">
+                                        Putuskan Timbangan Balita
+                                    </button>
+
+                                    <span id="iotscaleStatus" class="text-sm text-gray-500">
+                                        Timbangan balita belum terhubung
+                                    </span>
+                                </div>
                             </div>
 
                             @error('birth_weight')
@@ -139,7 +159,8 @@
 
                         <!-- Birth Height Field -->
                         <div class="w-full">
-                            <label for="birth_height" class="block text-sm font-medium text-gray-700 mb-1">Tinggi Lahir (cm)
+                            <label for="birth_height" class="block text-sm font-medium text-gray-700 mb-1">Tinggi Lahir
+                                (cm)
                                 <span class="text-red-500">*</span></label>
                             <input type="number" step="0.01" name="birth_height" id="birth_height"
                                 value="{{ old('birth_height', $children->birth_height ?? '') }}" required
@@ -219,10 +240,8 @@
     </div>
 @endsection
 
-<script
-    src="{{ asset('js/scale.js') }}?v={{ filemtime(public_path('js/scale.js')) }}"
-    defer
-></script>
+<script src="{{ asset('js/scale.js') }}?v={{ filemtime(public_path('js/scale.js')) }}" defer></script>
+<script src="{{ asset('js/iotScale.js') }}?v={{ filemtime(public_path('js/iotScale.js')) }}" defer></script>
 <script
     src="{{ asset('js/thermometer.js') }}?v={{ filemtime(public_path('js/thermometer.js')) }}"
     defer
