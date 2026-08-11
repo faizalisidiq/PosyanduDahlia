@@ -155,23 +155,37 @@
                             </span>
                         </div>
 
-                        {{-- Timbangan Balita --}}
-                        <div>
+                        {{-- Alat Ukur Tinggi Balita --}}
+                        <div class="w-full">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Alat Ukur Tinggi Balita
+                            </label>
+
                             <div class="flex flex-wrap items-center gap-2 mt-3">
+
+                                {{-- Tombol Hubungkan --}}
                                 <button type="button" id="connectiotScaleButton"
                                     class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
-                                    Hubungkan Timbangan Balita
+                                    Hubungkan Alat
                                 </button>
 
+                                {{-- Tombol Ambil Data --}}
+                                <button type="button" id="measureiotScaleButton"
+                                    class="hidden px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all">
+                                    Ambil Data
+                                </button>
+
+                                {{-- Tombol Putuskan --}}
                                 <button type="button" id="disconnectiotScaleButton"
-                                    class="hidden px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all"
-                                    style="display:none; background:red !important; color:white !important;">
-                                    Putuskan Timbangan Balita
+                                    class="hidden px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all">
+                                    Putuskan Alat
                                 </button>
 
+                                {{-- Status --}}
                                 <span id="iotscaleStatus" class="text-sm text-gray-500">
-                                    Timbangan balita belum terhubung
+                                    Alat belum terhubung
                                 </span>
+
                             </div>
                         </div>
 
