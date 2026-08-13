@@ -6,6 +6,7 @@ use App\Models\GrowthMonitoring;
 use App\Http\Requests\StoreGrowthMonitoringRequest;
 use App\Http\Requests\UpdateGrowthMonitoringRequest;
 use Illuminate\Http\Request;
+
 use App\Services\AnthropometryService;
 
 class GrowthMonitoringController extends Controller
@@ -22,14 +23,7 @@ class GrowthMonitoringController extends Controller
      */
     public function index(Request $request)
     {
-        $user = auth()->user();
-        $staff = $user->staff;
-        $hasFullAccess = $staff && $staff->role === 'ketua-kader';
-
         $growthMonitorings = GrowthMonitoring::with(['child.mother', 'staff.user'])
-            ->when(!$hasFullAccess && $staff, function ($query) use ($staff) {
-                $query->where('staff_id', $staff->id);
-            })
             ->when($request->search, function ($query) use ($request) {
                 $query->whereHas('child', function ($q) use ($request) {
                     $q->where('name', 'like', "%{$request->search}%");
@@ -45,10 +39,9 @@ class GrowthMonitoringController extends Controller
      */
     public function create()
     {
-        $preselectedChildId = request('child_id');
         $childrens = \App\Models\Children::all();
         $staffs = \App\Models\Staff::with('user')->get();
-        return view('apps.growth-monitorings.create', compact('childrens', 'staffs', 'preselectedChildId'));
+        return view('apps.growth-monitorings.create', compact('childrens', 'staffs'));
     }
 
     /**
@@ -75,7 +68,7 @@ class GrowthMonitoringController extends Controller
             $growthMonitoring = GrowthMonitoring::make($data);
             $growthMonitoring->saveOrFail();
 
-            return redirect()->route('childrens.show', [$data['child_id'], 'tab' => 'pertumbuhan'])->with('success', 'Data pemantauan berhasil disimpan. Status Gizi: ' . $data['status']);
+            return redirect()->route('growth-monitorings.index')->with('success', 'Data pemantauan berhasil disimpan. Status Gizi: ' . $data['status']);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal menyimpan data: ' . $e->getMessage())->withInput();
         }
@@ -123,7 +116,7 @@ class GrowthMonitoringController extends Controller
             $growthMonitoring->fill($data);
             $growthMonitoring->saveOrFail();
 
-            return redirect()->route('childrens.show', [$growthMonitoring->child_id, 'tab' => 'pertumbuhan'])->with('success', 'Data pemantauan berhasil diperbarui. Status Gizi: ' . $data['status']);
+            return redirect()->route('growth-monitorings.index')->with('success', 'Data pemantauan berhasil diperbarui. Status Gizi: ' . $data['status']);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memperbarui data: ' . $e->getMessage())->withInput();
         }
@@ -135,12 +128,11 @@ class GrowthMonitoringController extends Controller
     public function destroy(GrowthMonitoring $growthMonitoring)
     {
         try {
-            $childId = $growthMonitoring->child_id;
             $growthMonitoring->deleteOrFail();
 
-            return redirect()->route('childrens.show', [$childId, 'tab' => 'pertumbuhan'])->with('success', 'Data pemantauan berhasil diarsipkan.');
+            return redirect()->route('growth-monitorings.index')->with('success', 'Growth monitoring deleted successfully.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal mengarsipkan data pemantauan: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete growth monitoring: ' . $e->getMessage());
         }
     }
 }

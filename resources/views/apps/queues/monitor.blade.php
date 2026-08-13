@@ -62,7 +62,7 @@
                         </div>
                         <div class="text-right">
                             <span
-                                class="px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wide bg-white border border-gray-200 text-gray-500">
+                                class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-white border border-gray-200 text-gray-500">
                                 {{ $queue->type == 'immunization' ? 'Imun' : 'Gizi' }}
                             </span>
                         </div>
@@ -155,7 +155,7 @@
                                 <span class="text-gray-600 font-medium">${queue.child.name.substring(0, 20)}</span>
                             </div>
                             <div class="text-right">
-                                <span class="px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wide bg-white border border-gray-200 text-gray-500">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-white border border-gray-200 text-gray-500">
                                     ${typeLabel}
                                 </span>
                             </div>

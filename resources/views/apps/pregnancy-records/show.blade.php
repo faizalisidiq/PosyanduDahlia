@@ -20,12 +20,12 @@
             </div>
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">Pemeriksaan #{{ $pregnancyRecord->id }}</h1>
-                <p class="text-base text-gray-500">Tanggal: {{ $pregnancyRecord->visit_date->format('d F Y') }}</p>
+                <p class="text-sm text-gray-500">Tanggal: {{ $pregnancyRecord->visit_date->format('d F Y') }}</p>
             </div>
         </div>
         
         <div class="flex items-center space-x-3">
-            <a href="{{ route('pregnancy-records.edit', $pregnancyRecord) }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 text-base font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
+            <a href="{{ route('pregnancy-records.edit', $pregnancyRecord) }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
@@ -34,7 +34,7 @@
             <form action="{{ route('pregnancy-records.destroy', $pregnancyRecord) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');" class="inline-block">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-50 text-red-700 border border-red-100 text-base font-medium rounded-lg hover:bg-red-100 transition-colors">
+                <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-50 text-red-700 border border-red-100 text-sm font-medium rounded-lg hover:bg-red-100 transition-colors">
                     <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
@@ -53,8 +53,8 @@
             <div class="p-6">
                 <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
                      <div class="sm:col-span-1">
-                        <dt class="text-base font-medium text-gray-500">Nama Ibu</dt>
-                        <dd class="mt-1 text-base text-gray-900 font-semibold">
+                        <dt class="text-sm font-medium text-gray-500">Nama Ibu</dt>
+                        <dd class="mt-1 text-sm text-gray-900 font-semibold">
                             <a href="{{ route('mothers.show', $pregnancyRecord->mother) }}" class="text-teal-600 hover:text-teal-700 hover:underline">
                                 {{ $pregnancyRecord->mother->name }}
                             </a>
@@ -62,27 +62,27 @@
                     </div>
 
                     <div class="sm:col-span-1">
-                        <dt class="text-base font-medium text-gray-500">Petugas Pemeriksa</dt>
-                        <dd class="mt-1 text-base text-gray-900">{{ $pregnancyRecord->staff->user->name }} - {{ $pregnancyRecord->staff->role }}</dd>
+                        <dt class="text-sm font-medium text-gray-500">Petugas Pemeriksa</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $pregnancyRecord->staff->user->name }} - {{ $pregnancyRecord->staff->role }}</dd>
                     </div>
                     <div class="sm:col-span-1">
-                        <dt class="text-base font-medium text-gray-500">Hamil Ke-</dt>
-                        <dd class="mt-1 text-base text-gray-900">{{ $pregnancyRecord->pregnancy_order }}</dd>
+                        <dt class="text-sm font-medium text-gray-500">Hamil Ke-</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $pregnancyRecord->pregnancy_order }}</dd>
                     </div>
                     <div class="sm:col-span-1">
-                        <dt class="text-base font-medium text-gray-500">Usia Kandungan</dt>
-                        <dd class="mt-1 text-base text-gray-900">{{ $pregnancyRecord->gestational_age }}</dd>
+                        <dt class="text-sm font-medium text-gray-500">Usia Kandungan</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $pregnancyRecord->gestational_age }}</dd>
                     </div>
                     <div class="sm:col-span-1">
-                        <dd class="mt-1 text-base text-gray-900">{{ $pregnancyRecord->weight }} kg</dd>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $pregnancyRecord->weight }} kg</dd>
                     </div>
                     <div class="sm:col-span-1">
-                        <dt class="text-base font-medium text-gray-500">Lingkar Lengan Atas (LILA)</dt>
-                        <dd class="mt-1 text-base text-gray-900">{{ $pregnancyRecord->arm_circumference }} cm</dd>
+                        <dt class="text-sm font-medium text-gray-500">Lingkar Lengan Atas (LILA)</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $pregnancyRecord->arm_circumference }} cm</dd>
                     </div>
                      <div class="sm:col-span-1">
-                        <dt class="text-base font-medium text-gray-500">Tekanan Darah</dt>
-                        <dd class="mt-1 text-base text-gray-900">{{ $pregnancyRecord->blood_pressure }} mmHg</dd>
+                        <dt class="text-sm font-medium text-gray-500">Tekanan Darah</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $pregnancyRecord->blood_pressure }} mmHg</dd>
                     </div>
                 </dl>
             </div>
@@ -92,7 +92,7 @@
         <div class="space-y-6">
              <div class="bg-blue-50 rounded-xl border border-blue-100 p-6">
                  <h3 class="font-bold text-blue-900 mb-2">Informasi Penting</h3>
-                 <p class="text-base text-blue-800 leading-relaxed">
+                 <p class="text-sm text-blue-800 leading-relaxed">
                      Pastikan semua data pemeriksaan diinput dengan benar sesuai dengan hasil pengukuran fisik. Data ini sangat penting untuk memantau kesehatan ibu dan janin.
                  </p>
              </div>

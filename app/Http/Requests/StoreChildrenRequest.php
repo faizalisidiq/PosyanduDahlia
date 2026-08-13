@@ -30,6 +30,7 @@ class StoreChildrenRequest extends FormRequest
             'birth_date' => 'required|date',
             'birth_weight' => 'required|string|max:255',
             'birth_height' => 'required|string|max:255',
+            'temperature' => 'nullable|numeric|min:30|max:45',
             'bpjs_facility' => 'nullable|in:Klinik,Puskesmas,RS',
         ];
     }

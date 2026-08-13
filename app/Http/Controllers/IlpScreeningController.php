@@ -19,15 +19,9 @@ class IlpScreeningController extends Controller
      */
     public function index(Request $request)
     {
-        $user = auth()->user();
-        $staff = $user->staff;
-        $hasFullAccess = $staff && $staff->role === 'ketua-kader';
-
         $ilpScreenings = IlpScreening::with(['subjectable', 'staff.user'])
-            ->when(!$hasFullAccess && $staff, function ($query) use ($staff) {
-                $query->where('staff_id', $staff->id);
-            })
             ->when($request->search, function ($query) use ($request) {
+                // Search by staff name or subject name
                 $term = $request->search;
                 $query->whereHasMorph('subjectable', [Mother::class, Children::class, Elderly::class], function ($q) use ($term) {
                     $q->where('name', 'like', "%{$term}%");
@@ -48,26 +42,12 @@ class IlpScreeningController extends Controller
      */
     public function create()
     {
-        $preselectedType = null;
-        $preselectedId = null;
-
-        if (request('lansia_id')) {
-            $preselectedType = 'App\Models\Elderly';
-            $preselectedId = request('lansia_id');
-        } elseif (request('mother_id')) {
-            $preselectedType = 'App\Models\Mother';
-            $preselectedId = request('mother_id');
-        } elseif (request('child_id')) {
-            $preselectedType = 'App\Models\Children';
-            $preselectedId = request('child_id');
-        }
-
         $mothers = Mother::all();
         $childrens = Children::with('mother')->get();
         $elderlies = Elderly::all();
         $staffs = Staff::with('user')->get();
 
-        return view('apps.ilp-screenings.create', compact('mothers', 'childrens', 'elderlies', 'staffs', 'preselectedType', 'preselectedId'));
+        return view('apps.ilp-screenings.create', compact('mothers', 'childrens', 'elderlies', 'staffs'));
     }
 
     /**
@@ -96,19 +76,8 @@ class IlpScreeningController extends Controller
                 }
             }
 
-            $screening = IlpScreening::create($data);
-
-            // Redirect back to detail page
-            $redirectUrl = route('dashboard');
-            if ($data['subjectable_type'] === 'App\Models\Elderly') {
-                $redirectUrl = route('elderlies.show', [$data['subjectable_id'], 'tab' => 'screening']);
-            } elseif ($data['subjectable_type'] === 'App\Models\Mother') {
-                $redirectUrl = route('mothers.show', [$data['subjectable_id'], 'tab' => 'screening']);
-            } elseif ($data['subjectable_type'] === 'App\Models\Children') {
-                $redirectUrl = route('childrens.show', [$data['subjectable_id'], 'tab' => 'screening']);
-            }
-
-            return redirect($redirectUrl)->with('success', 'Screening ILP berhasil ditambahkan.');
+            IlpScreening::create($data);
+            return redirect()->route('ilp-screenings.index')->with('success', 'Screening ILP berhasil ditambahkan.');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menambahkan data: ' . $e->getMessage())->withInput();
         }
@@ -142,21 +111,10 @@ class IlpScreeningController extends Controller
     public function update(UpdateIlpScreeningRequest $request, IlpScreening $ilpScreening)
     {
         try {
-            $data = $request->validated();
-            $ilpScreening->update($data);
-
-            $redirectUrl = route('dashboard');
-            if ($ilpScreening->subjectable_type === 'App\Models\Elderly') {
-                $redirectUrl = route('elderlies.show', [$ilpScreening->subjectable_id, 'tab' => 'screening']);
-            } elseif ($ilpScreening->subjectable_type === 'App\Models\Mother') {
-                $redirectUrl = route('mothers.show', [$ilpScreening->subjectable_id, 'tab' => 'screening']);
-            } elseif ($ilpScreening->subjectable_type === 'App\Models\Children') {
-                $redirectUrl = route('childrens.show', [$ilpScreening->subjectable_id, 'tab' => 'screening']);
-            }
-
-            return redirect($redirectUrl)->with('success', 'Screening ILP berhasil diperbarui.');
+            $ilpScreening->update($request->validated());
+            return redirect()->route('ilp-screenings.index')->with('success', 'Screening ILP berhasil diperbarui.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal diperbarui: ' . $e->getMessage())->withInput();
+            return back()->with('error', 'Gagal memperbarui data: ' . $e->getMessage())->withInput();
         }
     }
 
@@ -166,25 +124,12 @@ class IlpScreeningController extends Controller
     public function destroy(IlpScreening $ilpScreening)
     {
         try {
-            $subjectableId = $ilpScreening->subjectable_id;
-            $subjectableType = $ilpScreening->subjectable_type;
             $ilpScreening->delete();
-
-            $redirectUrl = route('dashboard');
-            if ($subjectableType === 'App\Models\Elderly') {
-                $redirectUrl = route('elderlies.show', [$subjectableId, 'tab' => 'screening']);
-            } elseif ($subjectableType === 'App\Models\Mother') {
-                $redirectUrl = route('mothers.show', [$subjectableId, 'tab' => 'screening']);
-            } elseif ($subjectableType === 'App\Models\Children') {
-                $redirectUrl = route('childrens.show', [$subjectableId, 'tab' => 'screening']);
-            }
-
-            return redirect($redirectUrl)->with('success', 'Screening ILP berhasil diarsipkan.');
+            return redirect()->route('ilp-screenings.index')->with('success', 'Screening ILP berhasil dihapus.');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menghapus data: ' . $e->getMessage());
         }
     }
-
     public function export(Request $request, \App\Services\ExcelExportService $exportService)
     {
         try {

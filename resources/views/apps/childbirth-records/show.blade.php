@@ -20,12 +20,12 @@
             </div>
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">Persalinan #{{ $childbirthRecord->id }}</h1>
-                <p class="text-base text-gray-500">Tanggal: {{ $childbirthRecord->delivery_date->format('d F Y') }}</p>
+                <p class="text-sm text-gray-500">Tanggal: {{ $childbirthRecord->delivery_date->format('d F Y') }}</p>
             </div>
         </div>
         
         <div class="flex items-center space-x-3">
-            <a href="{{ route('childbirth-records.edit', $childbirthRecord) }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 text-base font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
+            <a href="{{ route('childbirth-records.edit', $childbirthRecord) }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
@@ -34,7 +34,7 @@
             <form action="{{ route('childbirth-records.destroy', $childbirthRecord) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');" class="inline-block">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-50 text-red-700 border border-red-100 text-base font-medium rounded-lg hover:bg-red-100 transition-colors">
+                <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-50 text-red-700 border border-red-100 text-sm font-medium rounded-lg hover:bg-red-100 transition-colors">
                     <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
@@ -53,24 +53,24 @@
             <div class="p-6">
                 <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
                      <div class="sm:col-span-1">
-                        <dt class="text-base font-medium text-gray-500">Nama Ibu</dt>
-                        <dd class="mt-1 text-base text-gray-900 font-semibold">
+                        <dt class="text-sm font-medium text-gray-500">Nama Ibu</dt>
+                        <dd class="mt-1 text-sm text-gray-900 font-semibold">
                             <a href="{{ route('mothers.show', $childbirthRecord->mother) }}" class="text-teal-600 hover:text-teal-700 hover:underline">
                                 {{ $childbirthRecord->mother->name }}
                             </a>
                         </dd>
                     </div>
                      <div class="sm:col-span-1">
-                        <dt class="text-base font-medium text-gray-500">Petugas Penolong</dt>
-                        <dd class="mt-1 text-base text-gray-900">{{ $childbirthRecord->staff->user->name }} - {{ $childbirthRecord->staff->role }}</dd>
+                        <dt class="text-sm font-medium text-gray-500">Petugas Penolong</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $childbirthRecord->staff->user->name }} - {{ $childbirthRecord->staff->role }}</dd>
                     </div>
                     <div class="sm:col-span-1">
-                        <dt class="text-base font-medium text-gray-500">Tempat Persalinan</dt>
-                        <dd class="mt-1 text-base text-gray-900">{{ $childbirthRecord->delivery_location }}</dd>
+                        <dt class="text-sm font-medium text-gray-500">Tempat Persalinan</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $childbirthRecord->delivery_location }}</dd>
                     </div>
                     <div class="sm:col-span-2">
-                        <dt class="text-base font-medium text-gray-500">Kondisi Bayi</dt>
-                        <dd class="mt-1 text-base text-gray-900 bg-gray-50 p-3 rounded-lg border border-gray-100">{{ $childbirthRecord->baby_condition }}</dd>
+                        <dt class="text-sm font-medium text-gray-500">Kondisi Bayi</dt>
+                        <dd class="mt-1 text-sm text-gray-900 bg-gray-50 p-3 rounded-lg border border-gray-100">{{ $childbirthRecord->baby_condition }}</dd>
                     </div>
                 </dl>
             </div>
@@ -80,11 +80,11 @@
         <div class="space-y-6">
              <div class="bg-teal-50 rounded-xl border border-teal-100 p-6">
                  <h3 class="font-bold text-teal-900 mb-2">Penting!</h3>
-                 <p class="text-base text-teal-800 leading-relaxed">
+                 <p class="text-sm text-teal-800 leading-relaxed">
                      Segera daftarkan bayi sebagai anak baru (Data Anak) untuk memantau tumbuh kembangnya di posyandu.
                  </p>
                  <div class="mt-4">
-                     <a href="{{ route('childrens.create') }}" class="inline-flex items-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-base font-medium rounded-lg shadow-sm transition-colors">
+                     <a href="{{ route('childrens.create') }}" class="inline-flex items-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors">
                          + Tambah Data Anak
                      </a>
                  </div>

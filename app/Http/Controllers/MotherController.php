@@ -60,27 +60,7 @@ class MotherController extends Controller
      */
     public function show(Mother $mother)
     {
-        $user = auth()->user();
-        $staff = $user->staff;
-        $hasFullAccess = $staff && $staff->role === 'ketua-kader';
-
-        $pregnancyRecords = $mother->pregnancyRecords()
-            ->with('staff.user')
-            ->when(!$hasFullAccess && $staff, function ($query) use ($staff) {
-                $query->where('staff_id', $staff->id);
-            })
-            ->latest()
-            ->get();
-
-        $childbirthRecords = $mother->childbirthRecords()
-            ->with(['children', 'staff.user'])
-            ->when(!$hasFullAccess && $staff, function ($query) use ($staff) {
-                $query->where('staff_id', $staff->id);
-            })
-            ->latest()
-            ->get();
-
-        return view('apps.mothers.show', compact('mother', 'pregnancyRecords', 'childbirthRecords'));
+        return view('apps.mothers.show', compact('mother'));
     }
 
     /**
