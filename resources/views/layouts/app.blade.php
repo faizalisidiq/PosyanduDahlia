@@ -30,6 +30,9 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
@@ -53,6 +56,62 @@
             
         </div>
     </div>
+
+    <!-- SweetAlert2 Global Confirm Dialog Handler -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.addEventListener('submit', function(e) {
+                const form = e.target;
+                
+                // Regular soft delete
+                if (form.classList.contains('delete-form')) {
+                    if (form.dataset.confirmed) {
+                        return;
+                    }
+                    e.preventDefault();
+                    
+                    Swal.fire({
+                        title: 'Apakah Anda yakin ingin mengarsipkan data ini?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#0d9488', // Teal 600
+                        cancelButtonColor: '#ef4444',  // Red 500
+                        confirmButtonText: 'Ya, Arsipkan!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.dataset.confirmed = true;
+                            form.submit();
+                        }
+                    });
+                }
+                
+                // Permanent delete
+                if (form.classList.contains('delete-permanent-form')) {
+                    if (form.dataset.confirmed) {
+                        return;
+                    }
+                    e.preventDefault();
+                    
+                    Swal.fire({
+                        title: 'Apakah Anda yakin ingin menghapus data ini secara permanen?',
+                        text: 'Tindakan ini tidak dapat dibatalkan!',
+                        icon: 'error',
+                        showCancelButton: true,
+                        confirmButtonColor: '#ef4444', // Red 500
+                        cancelButtonColor: '#6b7280', // Gray 500
+                        confirmButtonText: 'Ya, Hapus Permanen',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.dataset.confirmed = true;
+                            form.submit();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

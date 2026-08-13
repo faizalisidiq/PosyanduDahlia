@@ -16,7 +16,14 @@ class ChildbirthRecordController extends Controller
      */
     public function index(Request $request)
     {
+        $user = auth()->user();
+        $staff = $user->staff;
+        $hasFullAccess = $staff && $staff->role === 'ketua-kader';
+
         $childbirthRecords = ChildbirthRecord::with(['mother', 'staff.user'])
+            ->when(!$hasFullAccess && $staff, function ($query) use ($staff) {
+                $query->where('staff_id', $staff->id);
+            })
             ->when($request->search, function ($query) use ($request) {
                 $query->whereHas('mother', function ($q) use ($request) {
                     $q->where('name', 'like', "%{$request->search}%");
@@ -35,9 +42,10 @@ class ChildbirthRecordController extends Controller
      */
     public function create()
     {
+        $preselectedMotherId = request('mother_id');
         $mothers = \App\Models\Mother::all();
         $staffs = \App\Models\Staff::with('user')->get();
-        return view('apps.childbirth-records.create', compact('mothers', 'staffs'));
+        return view('apps.childbirth-records.create', compact('mothers', 'staffs', 'preselectedMotherId'));
     }
 
     /**
@@ -82,7 +90,7 @@ class ChildbirthRecordController extends Controller
                 }
             });
 
-            return redirect()->route('childbirth-records.index')->with('success', 'Data persalinan dan data anak berhasil disimpan.');
+            return redirect()->route('mothers.show', [$data['mother_id'], 'tab' => 'persalinan'])->with('success', 'Data persalinan dan data anak berhasil disimpan.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal menyimpan data: ' . $e->getMessage())->withInput();
         }
@@ -117,9 +125,9 @@ class ChildbirthRecordController extends Controller
             $childbirthRecord->fill($data);
             $childbirthRecord->saveOrFail();
 
-            return redirect()->route('childbirth-records.index')->with('success', 'Childbirth record updated successfully.');
+            return redirect()->route('mothers.show', [$childbirthRecord->mother_id, 'tab' => 'persalinan'])->with('success', 'Data persalinan berhasil diperbarui.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to update childbirth record: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal memperbarui data persalinan: ' . $e->getMessage());
         }
     }
 
@@ -129,11 +137,12 @@ class ChildbirthRecordController extends Controller
     public function destroy(ChildbirthRecord $childbirthRecord)
     {
         try {
+            $motherId = $childbirthRecord->mother_id;
             $childbirthRecord->deleteOrFail();
 
-            return redirect()->route('childbirth-records.index')->with('success', 'Childbirth record deleted successfully.');
+            return redirect()->route('mothers.show', [$motherId, 'tab' => 'persalinan'])->with('success', 'Data persalinan berhasil diarsipkan.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to delete childbirth record: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal mengarsipkan data persalinan: ' . $e->getMessage());
         }
     }
 

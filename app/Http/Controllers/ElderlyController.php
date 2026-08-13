@@ -54,7 +54,19 @@ class ElderlyController extends Controller
      */
     public function show(Elderly $elderly)
     {
-        return view('apps.elderlies.show', compact('elderly'));
+        $user = auth()->user();
+        $staff = $user->staff;
+        $hasFullAccess = $staff && $staff->role === 'ketua-kader';
+
+        $screenings = $elderly->screenings()
+            ->with('staff.user')
+            ->when(!$hasFullAccess && $staff, function ($query) use ($staff) {
+                $query->where('staff_id', $staff->id);
+            })
+            ->latest('checkup_date')
+            ->get();
+
+        return view('apps.elderlies.show', compact('elderly', 'screenings'));
     }
 
     /**
