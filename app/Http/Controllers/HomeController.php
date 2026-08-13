@@ -23,57 +23,26 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-        $staff = $user->staff;
-        $hasFullAccess = $staff && $staff->role === 'ketua-kader';
-        $staffId = $staff ? $staff->id : null;
-
-        // 1. Children scoping
-        if ($hasFullAccess || !$staff) {
-            $totalChildren = \App\Models\Children::count();
-            $newChildrenThisMonth = \App\Models\Children::whereMonth('created_at', now()->month)
-                ->whereYear('created_at', now()->year)
-                ->count();
-        } else {
-            $myChildIds = \App\Models\GrowthMonitoring::where('staff_id', $staffId)->distinct()->pluck('child_id');
-            $totalChildren = \App\Models\Children::whereIn('id', $myChildIds)->count();
-            $newChildrenThisMonth = \App\Models\Children::whereIn('id', $myChildIds)
-                ->whereMonth('created_at', now()->month)
-                ->whereYear('created_at', now()->year)
-                ->count();
-        }
+        // 1. Total Children & Growth
+        $totalChildren = \App\Models\Children::count();
+        $newChildrenThisMonth = \App\Models\Children::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
         $childrenGrowth = $totalChildren > 0 ? ($newChildrenThisMonth / $totalChildren) * 100 : 0;
 
-        // 2. Mothers scoping
-        if ($hasFullAccess || !$staff) {
-            $totalMothers = \App\Models\Mother::count();
-            $newMothersThisMonth = \App\Models\Mother::whereMonth('created_at', now()->month)
-                ->whereYear('created_at', now()->year)
-                ->count();
-        } else {
-            $myChildIds = \App\Models\GrowthMonitoring::where('staff_id', $staffId)->distinct()->pluck('child_id');
-            $myMotherIds = \App\Models\PregnancyRecord::where('staff_id', $staffId)->distinct()->pluck('mother_id')
-                ->merge(\App\Models\ChildbirthRecord::where('staff_id', $staffId)->distinct()->pluck('mother_id'))
-                ->merge(\App\Models\Children::whereIn('id', $myChildIds)->pluck('mother_id'))
-                ->unique();
-            $totalMothers = \App\Models\Mother::whereIn('id', $myMotherIds)->count();
-            $newMothersThisMonth = \App\Models\Mother::whereIn('id', $myMotherIds)
-                ->whereMonth('created_at', now()->month)
-                ->whereYear('created_at', now()->year)
-                ->count();
-        }
+        // 2. Total Pregnant Mothers (Approximated by Mothers with pregnancy records)
+        // For simplicity, showing Total Mothers currently registered
+        $totalMothers = \App\Models\Mother::count();
+        $newMothersThisMonth = \App\Models\Mother::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
         $mothersGrowth = $totalMothers > 0 ? ($newMothersThisMonth / $totalMothers) * 100 : 0;
 
-        // 3. Growth Monitorings (Visits) This Month
-        $visitsQuery = \App\Models\GrowthMonitoring::query();
-        if (!$hasFullAccess && $staff) {
-            $visitsQuery->where('staff_id', $staffId);
-        }
-        
-        $currentMonthVisits = (clone $visitsQuery)->whereMonth('checkup_date', now()->month)
+        // 3. Growth Monitorings (Visits) This Month for "Total Kunjungan"
+        $currentMonthVisits = \App\Models\GrowthMonitoring::whereMonth('checkup_date', now()->month)
             ->whereYear('checkup_date', now()->year)
             ->count();
-        $lastMonthVisits = (clone $visitsQuery)->whereMonth('checkup_date', now()->subMonth()->month)
+        $lastMonthVisits = \App\Models\GrowthMonitoring::whereMonth('checkup_date', now()->subMonth()->month)
             ->whereYear('checkup_date', now()->subMonth()->year)
             ->count();
         
@@ -81,19 +50,27 @@ class HomeController extends Controller
         if ($lastMonthVisits > 0) {
             $visitGrowth = (($currentMonthVisits - $lastMonthVisits) / $lastMonthVisits) * 100;
         } else if ($currentMonthVisits > 0) {
-            $visitGrowth = 100;
+            $visitGrowth = 100; // 100% growth if straight from 0
         }
 
+        // 4. Stunting / Malnutrition Risk (Status != 'normal' ?? or hardcoded from 'status' text)
+        // Let's count records with status 'stunted' or similar if we knew the values.
+        // Assuming 'status' field stores 'Gizi Buruk', 'Gizi Kurang' etc.
+        // Let's just Count "Gizi Buruk" + "Gizi Kurang" from latest records? 
+        // For efficiency, let's just count *Issues* from GrowthMonitoring this month not 'Selesai' (Wait, status is 'Selesai' in the view?? 
+        // No, in the view table it says "Selesai", but inside `GrowthMonitoring` model, `status` usually refers to nutrition status like 'Normal', 'Stunted'.
+        // Let's check `GrowthMonitoring` viewing logic if possible, or just use "Total Staff" as the 3rd card for now to be safe and easiest.
         $totalStaff = \App\Models\Staff::count();
 
-        // 5. Recent Activity
-        $recentQuery = \App\Models\GrowthMonitoring::with(['child', 'child.mother', 'staff']);
-        if (!$hasFullAccess && $staff) {
-            $recentQuery->where('staff_id', $staffId);
-        }
-        $recentActivities = $recentQuery->latest('checkup_date')->take(5)->get();
+        // 5. Recent Activity (Latest Growth Monitorings)
+        $recentActivities = \App\Models\GrowthMonitoring::with(['child', 'child.mother', 'staff'])
+            ->latest('checkup_date')
+            ->take(5)
+            ->get();
 
         // --- CHART DATA ANALYTICS ---
+
+        // Chart 1: Monthly Trends (Visits vs New Children) - Last 12 Months
         $months = collect([]);
         $visitsData = collect([]);
         $newChildrenData = collect([]);
@@ -103,57 +80,51 @@ class HomeController extends Controller
             $monthName = $date->format('M Y');
             $months->push($monthName);
 
-            $visitsQ = \App\Models\GrowthMonitoring::whereMonth('checkup_date', $date->month)
-                ->whereYear('checkup_date', $date->year);
-            if (!$hasFullAccess && $staff) {
-                $visitsQ->where('staff_id', $staffId);
-            }
-            $visitsData->push($visitsQ->count());
+            $visits = \App\Models\GrowthMonitoring::whereMonth('checkup_date', $date->month)
+                ->whereYear('checkup_date', $date->year)
+                ->count();
+            $visitsData->push($visits);
 
-            $newChildrenQ = \App\Models\Children::whereMonth('created_at', $date->month)
-                ->whereYear('created_at', $date->year);
-            if (!$hasFullAccess && $staff) {
-                $newChildrenQ->whereIn('id', $myChildIds ?? []);
-            }
-            $newChildrenData->push($newChildrenQ->count());
+            $newChildren = \App\Models\Children::whereMonth('created_at', $date->month)
+                ->whereYear('created_at', $date->year)
+                ->count();
+            $newChildrenData->push($newChildren);
         }
 
-        // Gender Chart
-        $genderQ = \App\Models\Children::selectRaw('gender, count(*) as count');
-        if (!$hasFullAccess && $staff) {
-            $genderQ->whereIn('id', $myChildIds ?? []);
-        }
-        $genderStats = $genderQ->groupBy('gender')->pluck('count', 'gender')->toArray();
+        // Chart 2: Children Demographics (Gender)
+        $genderStats = \App\Models\Children::selectRaw('gender, count(*) as count')
+            ->groupBy('gender')
+            ->pluck('count', 'gender')
+            ->toArray();
+        // Ensure keys exist
         $genderData = [
             'male' => $genderStats['male'] ?? 0,
             'female' => $genderStats['female'] ?? 0
         ];
 
-        // Nutritional Chart
-        $nutritionalQuery = \App\Models\GrowthMonitoring::query()
+        // Chart 3: Nutritional Status Distribution (Latest Month)
+        // Using checkup_date for the current month or just latest status of all children if usage is "Current State"
+        // Let's use latest checkup per child to show "Current Health Landscape"
+        $nutritionalStatusData = \App\Models\GrowthMonitoring::query()
             ->whereIn('id', function($query) {
                 $query->selectRaw('MAX(id)')
                       ->from('growth_monitorings')
                       ->groupBy('child_id');
-            });
-        if (!$hasFullAccess && $staff) {
-            $nutritionalQuery->where('staff_id', $staffId);
-        }
-        $nutritionalStatusData = $nutritionalQuery->selectRaw('status, count(*) as count')
+            })
+            ->selectRaw('status, count(*) as count')
             ->groupBy('status')
             ->pluck('count', 'status')
             ->toArray();
         
+        // Normalize keys if needed (handling case sensitivity or nulls)
         $statusLabels = array_keys($nutritionalStatusData);
         $statusValues = array_values($nutritionalStatusData);
 
-        // Top Staff
-        $topStaffQ = \App\Models\GrowthMonitoring::whereMonth('checkup_date', now()->month)
-            ->whereYear('checkup_date', now()->year);
-        if (!$hasFullAccess && $staff) {
-            $topStaffQ->where('staff_id', $staffId);
-        }
-        $topStaff = $topStaffQ->selectRaw('staff_id, count(*) as total_checks')
+
+        // Chart 4: Staff Performance (Top 5 this month)
+        $topStaff = \App\Models\GrowthMonitoring::whereMonth('checkup_date', now()->month)
+            ->whereYear('checkup_date', now()->year)
+            ->selectRaw('staff_id, count(*) as total_checks')
             ->groupBy('staff_id')
             ->with(['staff.user'])
             ->orderByDesc('total_checks')
@@ -166,20 +137,12 @@ class HomeController extends Controller
                 ];
             });
 
-        // Age Distribution
-        if ($hasFullAccess || !$staff) {
-            $visitingChildrenIds = \App\Models\GrowthMonitoring::where('checkup_date', '>=', now()->subDays(30))
-                ->distinct()
-                ->pluck('child_id');
-            $visitingChildren = \App\Models\Children::whereIn('id', $visitingChildrenIds)->select('birth_date')->get();
-        } else {
-            $visitingChildrenIds = \App\Models\GrowthMonitoring::where('staff_id', $staffId)
-                ->where('checkup_date', '>=', now()->subDays(30))
-                ->distinct()
-                ->pluck('child_id');
-            $visitingChildren = \App\Models\Children::whereIn('id', $visitingChildrenIds)->select('birth_date')->get();
-        }
+        // NEW: Age Distribution of Visiting Children (Last 30 Days)
+        $visitingChildrenIds = \App\Models\GrowthMonitoring::where('checkup_date', '>=', now()->subDays(30))
+            ->distinct()
+            ->pluck('child_id');
         
+        $visitingChildren = \App\Models\Children::whereIn('id', $visitingChildrenIds)->select('birth_date')->get();
         $ageGroups = [
             '0-12 bln' => 0,
             '13-24 bln' => 0,
@@ -201,60 +164,6 @@ class HomeController extends Controller
         $ageLabels = array_keys($ageGroups);
         $ageValues = array_values($ageGroups);
 
-        // TODAY'S PATIENTS
-        $todayPregnancies = \App\Models\PregnancyRecord::with('mother')->whereDate('visit_date', today());
-        $todayDeliveries = \App\Models\ChildbirthRecord::with('mother')->whereDate('delivery_date', today());
-        $todayGrowths = \App\Models\GrowthMonitoring::with('child')->whereDate('checkup_date', today());
-        $todayScreenings = \App\Models\IlpScreening::with('subjectable')->whereDate('checkup_date', today());
-
-        if (!$hasFullAccess && $staff) {
-            $todayPregnancies->where('staff_id', $staffId);
-            $todayDeliveries->where('staff_id', $staffId);
-            $todayGrowths->where('staff_id', $staffId);
-            $todayScreenings->where('staff_id', $staffId);
-        }
-
-        $todayPatients = collect();
-        foreach ($todayPregnancies->get() as $r) {
-            if ($r->mother) {
-                $todayPatients->push([
-                    'name' => $r->mother->name,
-                    'type' => 'Ibu Hamil',
-                    'detail_url' => route('mothers.show', $r->mother_id) . '?tab=pemeriksaan',
-                ]);
-            }
-        }
-        foreach ($todayDeliveries->get() as $r) {
-            if ($r->mother) {
-                $todayPatients->push([
-                    'name' => $r->mother->name,
-                    'type' => 'Ibu Bersalin',
-                    'detail_url' => route('mothers.show', $r->mother_id) . '?tab=persalinan',
-                ]);
-            }
-        }
-        foreach ($todayGrowths->get() as $r) {
-            if ($r->child) {
-                $todayPatients->push([
-                    'name' => $r->child->name,
-                    'type' => 'Balita',
-                    'detail_url' => route('childrens.show', $r->child_id) . '?tab=pertumbuhan',
-                ]);
-            }
-        }
-        foreach ($todayScreenings->get() as $r) {
-            if ($r->subjectable) {
-                $todayPatients->push([
-                    'name' => $r->subjectable->name,
-                    'type' => $r->subjectable_type === \App\Models\Elderly::class ? 'Lansia' : ($r->subjectable_type === \App\Models\Mother::class ? 'Ibu' : 'Anak'),
-                    'detail_url' => $r->subjectable_type === \App\Models\Elderly::class 
-                        ? route('elderlies.show', $r->subjectable_id) . '?tab=screening'
-                        : ($r->subjectable_type === \App\Models\Mother::class ? route('mothers.show', $r->subjectable_id) : route('childrens.show', $r->subjectable_id)),
-                ]);
-            }
-        }
-        $todayPatients = $todayPatients->unique('name')->values();
-
         return view('apps.dashboard.index', compact(
             'totalChildren',
             'childrenGrowth',
@@ -263,8 +172,7 @@ class HomeController extends Controller
             'currentMonthVisits',
             'visitGrowth',
             'totalStaff',
-            'recentActivities',
-            'todayPatients'
+            'recentActivities'
         ))->with([
             'months' => $months->values()->all(),
             'visitsData' => $visitsData->values()->all(),

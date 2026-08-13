@@ -5,29 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Mother extends Model
 {
     /** @use HasFactory<\Database\Factories\MotherFactory> */
-    use HasFactory, SoftDeletes;
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleted(function ($mother) {
-            $mother->pregnancyRecords()->delete();
-            $mother->childbirthRecords()->delete();
-            $mother->children()->delete();
-        });
-
-        static::restoring(function ($mother) {
-            $mother->pregnancyRecords()->onlyTrashed()->restore();
-            $mother->childbirthRecords()->onlyTrashed()->restore();
-            $mother->children()->onlyTrashed()->restore();
-        });
-    }
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -47,6 +29,8 @@ class Mother extends Model
         'blood_type',
         'height',
         'weight',
+        'temperature',
+        'systolic_pressure', 'diastolic_pressure', 'pulse',
         'status',
     ];
 
@@ -73,13 +57,5 @@ class Mother extends Model
     public function pregnancyRecords(): HasMany
     {
         return $this->hasMany(PregnancyRecord::class);
-    }
-
-    /**
-     * Get the childbirth records that belong to the mother.
-     */
-    public function childbirthRecords(): HasMany
-    {
-        return $this->hasMany(ChildbirthRecord::class);
     }
 }

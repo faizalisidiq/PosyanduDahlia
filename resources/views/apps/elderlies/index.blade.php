@@ -17,7 +17,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="font-medium text-base">{{ session('success') }}</span>
+                <span class="font-medium text-sm">{{ session('success') }}</span>
             </div>
         @endif
 
@@ -27,7 +27,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="font-medium text-base">{{ session('error') }}</span>
+                <span class="font-medium text-sm">{{ session('error') }}</span>
             </div>
         @endif
 
@@ -44,11 +44,11 @@
                             </div>
                             <input type="text" name="search" value="{{ request('search') }}"
                                 style="padding-left: 3rem !important;"
-                                class="block w-full border border-gray-200 rounded-lg text-base bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-teal-500 focus:border-teal-500 transition-colors py-2 pr-3"
+                                class="block w-full border border-gray-200 rounded-lg text-sm bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-teal-500 focus:border-teal-500 transition-colors py-2 pr-3"
                                 placeholder="Cari nama lansia atau NIK...">
                         </div>
                         <button type="submit"
-                            class="inline-flex items-center justify-center px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white text-base font-medium rounded-lg shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
+                            class="inline-flex items-center justify-center px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
                             Cari
                         </button>
                     </form>
@@ -56,7 +56,7 @@
                 <div class="flex flex-col md:flex-row gap-2 w-full md:w-auto">
                     {{-- Export button can be added later if needed --}}
                     <a href="{{ route('elderlies.create') }}"
-                        class="inline-flex items-center justify-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-base font-medium rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 flex-shrink-0 w-full md:w-auto">
+                        class="inline-flex items-center justify-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 flex-shrink-0 w-full md:w-auto">
                         <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
@@ -68,7 +68,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-gray-50/50 border-b border-gray-100 text-gray-500 text-sm uppercase tracking-wider">
+                        <tr class="bg-gray-50/50 border-b border-gray-100 text-gray-500 text-xs uppercase tracking-wider">
                             <th class="px-6 py-4 font-semibold whitespace-nowrap">Nama Lansia</th>
                             <th class="px-6 py-4 font-semibold whitespace-nowrap">NIK</th>
                             <th class="px-6 py-4 font-semibold whitespace-nowrap">Usia</th>
@@ -77,22 +77,22 @@
                             <th class="px-6 py-4 font-semibold text-right whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100 text-base">
+                    <tbody class="divide-y divide-gray-100 text-sm">
                         @forelse($elderlies as $elderly)
                             <tr class="hover:bg-gray-50/80 transition-colors">
                                 <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{{ $elderly->name }}</td>
-                                <td class="px-6 py-4 text-gray-600 font-mono text-sm whitespace-nowrap">
+                                <td class="px-6 py-4 text-gray-600 font-mono text-xs whitespace-nowrap">
                                     {{ $elderly->identity_number }}</td>
                                 <td class="px-6 py-4 text-gray-600 whitespace-nowrap">
                                     {{ \Carbon\Carbon::parse($elderly->birth_date)->age }} Tahun
                                 </td>
                                 <td class="px-6 py-4 text-gray-600 whitespace-nowrap">
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium {{ $elderly->gender === 'male' ? 'bg-blue-50 text-blue-700 border-blue-100' : 'bg-pink-50 text-pink-700 border-pink-100' }}">
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $elderly->gender === 'male' ? 'bg-blue-50 text-blue-700 border-blue-100' : 'bg-pink-50 text-pink-700 border-pink-100' }}">
                                         {{ $elderly->gender === 'male' ? 'Laki-laki' : 'Perempuan' }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-gray-600 font-mono text-sm whitespace-nowrap">
+                                <td class="px-6 py-4 text-gray-600 font-mono text-xs whitespace-nowrap">
                                     {{ $elderly->phone_number ?? '-' }}</td>
                                 <td class="px-6 py-4 text-right whitespace-nowrap">
                                     <div class="flex items-center justify-end space-x-2">
@@ -143,10 +143,10 @@
                                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                             </svg>
                                         </div>
-                                        <h3 class="text-gray-900 font-medium text-base mb-1">Belum ada data lansia</h3>
-                                        <p class="text-sm text-gray-500 mb-4">Silakan tambahkan data lansia baru.</p>
+                                        <h3 class="text-gray-900 font-medium text-sm mb-1">Belum ada data lansia</h3>
+                                        <p class="text-xs text-gray-500 mb-4">Silakan tambahkan data lansia baru.</p>
                                         <a href="{{ route('elderlies.create') }}"
-                                            class="text-teal-600 hover:text-teal-700 text-base font-medium hover:underline">+
+                                            class="text-teal-600 hover:text-teal-700 text-sm font-medium hover:underline">+
                                             Tambah Lansia</a>
                                     </div>
                                 </td>

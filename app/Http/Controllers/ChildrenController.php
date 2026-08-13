@@ -65,25 +65,13 @@ class ChildrenController extends Controller
         // Load relationships
         $children->load('mother');
 
-        $user = auth()->user();
-        $staff = $user->staff;
-        $hasFullAccess = $staff && $staff->role === 'ketua-kader';
-
         // Get all data for Chart (Ordered by date ASC)
         // We load this manually to separate it from the paginated result
-        $allGrowthData = $children->growthMonitorings()
-            ->when(!$hasFullAccess && $staff, function ($query) use ($staff) {
-                $query->where('staff_id', $staff->id);
-            })
-            ->orderBy('checkup_date', 'asc')
-            ->get();
+        $allGrowthData = $children->growthMonitorings()->orderBy('checkup_date', 'asc')->get();
 
         // Get Paginated data for Table (Ordered by date DESC)
         $growthHistory = $children->growthMonitorings()
             ->with('staff') // Eager load staff to avoid N+1 in table
-            ->when(!$hasFullAccess && $staff, function ($query) use ($staff) {
-                $query->where('staff_id', $staff->id);
-            })
             ->orderBy('checkup_date', 'desc')
             ->paginate(10);
 

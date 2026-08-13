@@ -68,12 +68,4 @@ class Staff extends Model
     {
         return $this->hasMany(IlpScreening::class);
     }
-
-    /**
-     * Get the childbirth records for the staff.
-     */
-    public function childbirthRecords(): HasMany
-    {
-        return $this->hasMany(ChildbirthRecord::class);
-    }
 }

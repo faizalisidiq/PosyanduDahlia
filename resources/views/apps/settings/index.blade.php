@@ -20,7 +20,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-6 border-b border-gray-100">
             <h2 class="text-lg font-bold text-gray-800">Informasi Dasar</h2>
-            <p class="text-base text-gray-500 mt-1">Perbarui nama aplikasi dan lokasi posyandu.</p>
+            <p class="text-sm text-gray-500 mt-1">Perbarui nama aplikasi dan lokasi posyandu.</p>
         </div>
 
         @if(session('success'))
@@ -29,8 +29,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
             </svg>
             <div>
-                <h3 class="text-base font-medium text-green-800">Berhasil Disimpan</h3>
-                <p class="text-base text-green-700 mt-1">{{ session('success') }}</p>
+                <h3 class="text-sm font-medium text-green-800">Berhasil Disimpan</h3>
+                <p class="text-sm text-green-700 mt-1">{{ session('success') }}</p>
             </div>
         </div>
         @endif
@@ -41,7 +41,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 @foreach($settings as $key => $config)
                 <div>
-                    <label for="{{ $key }}" class="block text-base font-medium text-gray-700 mb-2">
+                    <label for="{{ $key }}" class="block text-sm font-medium text-gray-700 mb-2">
                         {{ $config['label'] }}
                     </label>
                     <div class="relative">
@@ -62,16 +62,16 @@
                         @enderror
                     </div>
                     @error($key)
-                        <p class="mt-2 text-base text-red-600">{{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
-                    <p class="mt-2 text-sm text-gray-500">Variable: <code class="bg-gray-100 px-1 py-0.5 rounded text-gray-700">{{ $key }}</code></p>
+                    <p class="mt-2 text-xs text-gray-500">Variable: <code class="bg-gray-100 px-1 py-0.5 rounded text-gray-700">{{ $key }}</code></p>
                 </div>
                 @endforeach
             </div>
 
             <div class="pt-6 border-t border-gray-100 flex justify-end">
                 <button type="submit" 
-                        class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 shadow-sm transition-all transform hover:scale-[1.02]">
+                        class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 shadow-sm transition-all transform hover:scale-[1.02]">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
                     </svg>
