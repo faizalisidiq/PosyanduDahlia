@@ -7,12 +7,12 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
                 <h2 class="text-xl font-bold text-gray-800">Manajemen Antrian Hari Ini</h2>
-                <p class="text-sm text-gray-500 mt-1">{{ \Carbon\Carbon::now()->format('d F Y') }}</p>
+                <p class="text-base text-gray-500 mt-1">{{ \Carbon\Carbon::now()->format('d F Y') }}</p>
             </div>
 
             <div class="flex gap-2">
                 <a href="{{ route('queues.public.monitor') }}" target="_blank"
-                    class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg shadow-sm">
+                    class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-base font-medium rounded-lg shadow-sm">
                     <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -20,7 +20,7 @@
                     Buka Layar Monitor
                 </a>
                 <a href="{{ route('queues.public.index') }}" target="_blank"
-                    class="inline-flex items-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-lg shadow-sm">
+                    class="inline-flex items-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-base font-medium rounded-lg shadow-sm">
                     <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -31,7 +31,7 @@
 
         @if (session('success'))
             <div class="p-4 bg-green-50 text-green-700 rounded-xl border border-green-100 flex items-center shadow-sm">
-                <span class="font-medium text-sm">{{ session('success') }}</span>
+                <span class="font-medium text-base">{{ session('success') }}</span>
             </div>
         @endif
 
@@ -45,14 +45,14 @@
                     </svg>
                 </div>
 
-                <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">Sedang Dipanggil</h3>
+                <h3 class="text-base font-bold text-gray-500 uppercase tracking-wide mb-4">Sedang Dipanggil</h3>
 
                 @if ($currentQueue)
                     <div class="flex items-center gap-6">
                         <div
                             class="bg-teal-50 text-teal-700 px-6 py-4 rounded-lg border border-teal-100 text-center min-w-[120px]">
                             <span class="block text-4xl font-black">{{ $currentQueue->queue_number }}</span>
-                            <span class="text-xs font-semibold uppercase">Nomor</span>
+                            <span class="text-sm font-semibold uppercase">Nomor</span>
                         </div>
                         <div>
                             <h4 class="text-2xl font-bold text-gray-900">{{ $currentQueue->child->name }}</h4>
@@ -63,12 +63,12 @@
                                     @method('PATCH')
                                     <input type="hidden" name="status" value="completed">
                                     <button type="submit"
-                                        class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md font-medium transition-colors">
+                                        class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-base rounded-md font-medium transition-colors">
                                         Selesai Periksa
                                     </button>
                                 </form>
                                 <a href="{{ route('growth-monitorings.create', ['child_id' => $currentQueue->child_id]) }}"
-                                    class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-md font-medium transition-colors">
+                                    class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-base rounded-md font-medium transition-colors">
                                     Input Data Timbang
                                 </a>
                                 <form action="{{ route('queues.status', $currentQueue) }}" method="POST">
@@ -76,7 +76,7 @@
                                     @method('PATCH')
                                     <input type="hidden" name="status" value="skipped">
                                     <button type="submit"
-                                        class="px-3 py-1 bg-yellow-400 hover:bg-yellow-500 text-white text-sm rounded-md font-medium transition-colors">
+                                        class="px-3 py-1 bg-yellow-400 hover:bg-yellow-500 text-white text-base rounded-md font-medium transition-colors">
                                         Lewati
                                     </button>
                                 </form>
@@ -93,15 +93,15 @@
             <div
                 class="bg-gradient-to-br from-teal-500 to-emerald-600 rounded-xl shadow-lg p-6 text-white flex flex-col justify-between">
                 <div>
-                    <p class="text-teal-100 text-sm font-medium mb-1">Total Antrian</p>
+                    <p class="text-teal-100 text-base font-medium mb-1">Total Antrian</p>
                     <h3 class="text-4xl font-bold">{{ $queues->count() }}</h3>
                 </div>
                 <div>
-                    <p class="text-teal-100 text-sm font-medium mb-1">Menunggu</p>
+                    <p class="text-teal-100 text-base font-medium mb-1">Menunggu</p>
                     <h3 class="text-2xl font-bold">{{ $queues->where('status', 'waiting')->count() }}</h3>
                 </div>
                 <div>
-                    <p class="text-teal-100 text-sm font-medium mb-1">Selesai</p>
+                    <p class="text-teal-100 text-base font-medium mb-1">Selesai</p>
                     <h3 class="text-2xl font-bold">{{ $queues->where('status', 'completed')->count() }}</h3>
                 </div>
             </div>
@@ -115,7 +115,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-gray-50/50 border-b border-gray-100 text-gray-500 text-xs uppercase tracking-wider">
+                        <tr class="bg-gray-50/50 border-b border-gray-100 text-gray-500 text-sm uppercase tracking-wider">
                             <th class="px-6 py-4 font-semibold whitespace-nowrap">No. Antrian</th>
                             <th class="px-6 py-4 font-semibold whitespace-nowrap">Nama Anak</th>
                             <th class="px-6 py-4 font-semibold whitespace-nowrap">Nama Ibu</th>
@@ -123,7 +123,7 @@
                             <th class="px-6 py-4 font-semibold text-right whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100 text-sm">
+                    <tbody class="divide-y divide-gray-100 text-base">
                         @forelse($queues as $queue)
                             <tr
                                 class="hover:bg-gray-50/80 transition-colors {{ $queue->status == 'called' ? 'bg-teal-50/50' : '' }}">
@@ -154,7 +154,7 @@
                                         ];
                                     @endphp
                                     <span
-                                        class="px-2 py-1 rounded-full text-xs font-bold uppercase {{ $statusClasses[$queue->status] ?? 'bg-gray-100' }}">
+                                        class="px-2 py-1 rounded-full text-sm font-bold uppercase {{ $statusClasses[$queue->status] ?? 'bg-gray-100' }}">
                                         {{ $statusLabels[$queue->status] ?? $queue->status }}
                                     </span>
                                 </td>

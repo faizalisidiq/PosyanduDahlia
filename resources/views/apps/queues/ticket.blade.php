@@ -19,11 +19,11 @@
                     class="ticket-card bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl p-6 mb-6 relative overflow-hidden bg-white shadow-sm">
                     <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-400 to-teal-600"></div>
 
-                    <p class="text-sm uppercase tracking-widest text-gray-500 mb-2 font-semibold">Nomor Antrian</p>
+                    <p class="text-base uppercase tracking-widest text-gray-500 mb-2 font-semibold">Nomor Antrian</p>
                     <div class="text-6xl font-black text-gray-800 mb-4 tracking-tight">{{ $queue->queue_number }}</div>
 
                     <div
-                        class="flex flex-col gap-1 items-center justify-center text-sm text-gray-600 border-t border-gray-200 pt-4 mt-4">
+                        class="flex flex-col gap-1 items-center justify-center text-base text-gray-600 border-t border-gray-200 pt-4 mt-4">
                         <p><span class="font-bold">{{ $queue->child->name }}</span></p>
                         <p>{{ $queue->date->format('d M Y') }}</p>
                     </div>
@@ -32,7 +32,7 @@
         </div>
 
         @if (session('info'))
-            <div class="mb-6 text-sm text-blue-600 bg-blue-50 p-3 rounded-lg">
+            <div class="mb-6 text-base text-blue-600 bg-blue-50 p-3 rounded-lg">
                 {{ session('info') }}
             </div>
         @endif

@@ -35,10 +35,6 @@ class StoreMotherRequest extends FormRequest
             'height' => 'required|string|max:255',
             'weight' => 'required|string|max:255',
             'status' => 'nullable|in:hamil,menyusui',
-            'temperature' => 'nullable|numeric|min:30|max:45',
-            'systolic_pressure' => 'nullable|integer|min:60|max:250',
-            'diastolic_pressure' => 'nullable|integer|min:40|max:150',
-            'pulse' => 'nullable|integer|min:30|max:200',
         ];
     }
 

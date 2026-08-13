@@ -18,7 +18,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="font-medium text-sm">{{ session('success') }}</span>
+                <span class="font-medium text-base">{{ session('success') }}</span>
             </div>
         @endif
 
@@ -28,7 +28,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="font-medium text-sm">{{ session('error') }}</span>
+                <span class="font-medium text-base">{{ session('error') }}</span>
             </div>
         @endif
 
@@ -45,18 +45,18 @@
                             </div>
                             <input type="text" name="search" value="{{ request('search') }}"
                                 style="padding-left: 3rem !important;"
-                                class="block w-full border border-gray-200 rounded-lg text-sm bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-teal-500 focus:border-teal-500 transition-colors py-2 pr-3"
+                                class="block w-full border border-gray-200 rounded-lg text-base bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-teal-500 focus:border-teal-500 transition-colors py-2 pr-3"
                                 placeholder="Cari nama pasien atau petugas...">
                         </div>
                         <button type="submit"
-                            class="inline-flex items-center justify-center px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
+                            class="inline-flex items-center justify-center px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white text-base font-medium rounded-lg shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
                             Cari
                         </button>
                     </form>
                 </div>
                 <div class="flex flex-col md:flex-row gap-2 w-full md:w-auto">
                     <button type="button" @click="exportModal = true"
-                        class="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 flex-shrink-0 w-full md:w-auto">
+                        class="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-base font-medium rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 flex-shrink-0 w-full md:w-auto">
                         <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -64,7 +64,7 @@
                         Export Excel
                     </button>
                     <a href="{{ route('ilp-screenings.create') }}"
-                        class="inline-flex items-center justify-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 flex-shrink-0 w-full md:w-auto">
+                        class="inline-flex items-center justify-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-base font-medium rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 flex-shrink-0 w-full md:w-auto">
                         <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
@@ -101,29 +101,29 @@
                                     </div>
                                     <div>
                                         <h3 class="text-lg font-bold text-gray-900">Export Rekap ILP</h3>
-                                        <p class="text-sm text-gray-500">Berdasarkan tanggal pemeriksaan.</p>
+                                        <p class="text-base text-gray-500">Berdasarkan tanggal pemeriksaan.</p>
                                     </div>
                                 </div>
 
                                 <div class="space-y-4">
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Dari
+                                            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Dari
                                                 Tanggal</label>
                                             <input type="date" name="start_date"
-                                                class="block w-full border border-gray-200 rounded-lg text-sm bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
+                                                class="block w-full border border-gray-200 rounded-lg text-base bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
                                         </div>
                                         <div>
-                                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sampai
+                                            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Sampai
                                                 Tanggal</label>
                                             <input type="date" name="end_date"
-                                                class="block w-full border border-gray-200 rounded-lg text-sm bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
+                                                class="block w-full border border-gray-200 rounded-lg text-base bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Posyandu</label>
-                                        <select name="health_post_id" class="block w-full border border-gray-200 rounded-lg text-sm bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
+                                        <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Posyandu</label>
+                                        <select name="health_post_id" class="block w-full border border-gray-200 rounded-lg text-base bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
                                             <option value="">Semua Posyandu</option>
                                             @foreach($healthPosts as $hp)
                                                 <option value="{{ $hp->id }}">{{ $hp->name }}</option>
@@ -132,8 +132,8 @@
                                     </div>
 
                                     <div>
-                                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Alamat (Keywords)</label>
-                                        <input type="text" name="address" placeholder="Contoh: Sukamaju" class="block w-full border border-gray-200 rounded-lg text-sm bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
+                                        <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Alamat (Keywords)</label>
+                                        <input type="text" name="address" placeholder="Contoh: Sukamaju" class="block w-full border border-gray-200 rounded-lg text-base bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
                                     </div>
                                     
                                     <p class="text-[10px] text-gray-400 italic">* Kosongkan untuk ekspor seluruh data</p>
@@ -141,11 +141,11 @@
                             </div>
                             <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row justify-end gap-2">
                                 <button type="button" @click="exportModal = false"
-                                    class="inline-flex justify-center rounded-lg border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+                                    class="inline-flex justify-center rounded-lg border border-gray-300 px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors">
                                     Batal
                                 </button>
                                 <button type="submit"
-                                    class="inline-flex justify-center rounded-lg border border-transparent px-4 py-2 bg-emerald-600 text-sm font-medium text-white hover:bg-emerald-700 transition-colors shadow-sm">
+                                    class="inline-flex justify-center rounded-lg border border-transparent px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 transition-colors shadow-sm">
                                     Download Excel
                                 </button>
                             </div>
@@ -157,7 +157,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-gray-50/50 border-b border-gray-100 text-gray-500 text-xs uppercase tracking-wider">
+                        <tr class="bg-gray-50/50 border-b border-gray-100 text-gray-500 text-sm uppercase tracking-wider">
                             <th class="px-6 py-4 font-semibold whitespace-nowrap">Tanggal</th>
                             <th class="px-6 py-4 font-semibold whitespace-nowrap">Tipe Pasien</th>
                             <th class="px-6 py-4 font-semibold whitespace-nowrap">Nama Pasien</th>
@@ -165,14 +165,14 @@
                             <th class="px-6 py-4 font-semibold text-right whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100 text-sm">
+                    <tbody class="divide-y divide-gray-100 text-base">
                         @forelse($ilpScreenings as $screening)
                             <tr class="hover:bg-gray-50/80 transition-colors">
                                 <td class="px-6 py-4 text-gray-600 font-medium whitespace-nowrap">
                                     {{ $screening->checkup_date->format('d M Y') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 rounded-full text-xs font-medium 
+                                    <span class="px-2 py-1 rounded-full text-sm font-medium 
                                                     @if($screening->subjectable_type == 'App\Models\Mother') bg-purple-50 text-purple-700 border border-purple-100
                                                     @elseif($screening->subjectable_type == 'App\Models\Elderly') bg-green-50 text-green-700 border border-green-100
                                                     @else bg-blue-50 text-blue-700 border border-blue-100
@@ -185,7 +185,7 @@
                                 </td>
                                 <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     {{ $screening->subjectable->name ?? '-' }}
-                                    <div class="text-xs text-gray-500 mt-1">
+                                    <div class="text-sm text-gray-500 mt-1">
                                         @php
                                             $results = is_array($screening->results) ? $screening->results : json_decode($screening->results ?? '[]', true);
                                             $age = $results['age_snapshot'] ?? null;
@@ -205,7 +205,7 @@
                                 <td class="px-6 py-4 text-gray-600 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div
-                                            class="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 mr-2">
+                                            class="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-600 mr-2">
                                             {{ substr($screening->staff->user->name ?? '?', 0, 1) }}
                                         </div>
                                         {{ $screening->staff->user->name ?? '-' }}
@@ -260,10 +260,10 @@
                                                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                             </svg>
                                         </div>
-                                        <h3 class="text-gray-900 font-medium text-sm mb-1">Belum ada data screening</h3>
-                                        <p class="text-xs text-gray-500 mb-4">Silakan tambahkan data screening baru.</p>
+                                        <h3 class="text-gray-900 font-medium text-base mb-1">Belum ada data screening</h3>
+                                        <p class="text-sm text-gray-500 mb-4">Silakan tambahkan data screening baru.</p>
                                         <a href="{{ route('ilp-screenings.create') }}"
-                                            class="text-teal-600 hover:text-teal-700 text-sm font-medium hover:underline">+
+                                            class="text-teal-600 hover:text-teal-700 text-base font-medium hover:underline">+
                                             Tambah Data</a>
                                     </div>
                                 </td>

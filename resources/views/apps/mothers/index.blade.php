@@ -8,15 +8,15 @@
         <!-- Status Switcher -->
         <div class="flex flex-wrap gap-2">
             <a href="{{ route('mothers.index', ['status' => 'hamil']) }}" 
-               class="px-4 py-2 text-sm font-bold rounded-lg transition-all duration-200 shadow-sm {{ $status == 'hamil' ? 'bg-teal-600 text-white' : 'bg-white text-teal-600 border border-teal-200 hover:bg-teal-600 hover:text-white' }}">
+               class="px-4 py-2 text-base font-bold rounded-lg transition-all duration-200 shadow-sm {{ $status == 'hamil' ? 'bg-teal-600 text-white' : 'bg-white text-teal-600 border border-teal-200 hover:bg-teal-600 hover:text-white' }}">
                 Ibu Hamil
             </a>
             <a href="{{ route('mothers.index', ['status' => 'menyusui']) }}" 
-               class="px-4 py-2 text-sm font-bold rounded-lg transition-all duration-200 shadow-sm {{ $status == 'menyusui' ? 'bg-teal-500 text-white' : 'bg-white text-teal-500 border border-teal-200 hover:bg-teal-500 hover:text-white' }}">
+               class="px-4 py-2 text-base font-bold rounded-lg transition-all duration-200 shadow-sm {{ $status == 'menyusui' ? 'bg-teal-500 text-white' : 'bg-white text-teal-500 border border-teal-200 hover:bg-teal-500 hover:text-white' }}">
                 Ibu Menyusui
             </a>
             <a href="{{ route('mothers.index', ['status' => 'lainnya']) }}" 
-               class="px-4 py-2 text-sm font-bold rounded-lg transition-all duration-200 shadow-sm {{ $status == 'lainnya' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-600 border border-emerald-200 hover:bg-emerald-600 hover:text-white' }}">
+               class="px-4 py-2 text-base font-bold rounded-lg transition-all duration-200 shadow-sm {{ $status == 'lainnya' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-600 border border-emerald-200 hover:bg-emerald-600 hover:text-white' }}">
                 Anak > 2 Tahun
             </a>
         </div>
@@ -31,7 +31,7 @@
             <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span class="font-medium text-sm">{{ session('success') }}</span>
+            <span class="font-medium text-base">{{ session('success') }}</span>
         </div>
     @endif
 
@@ -40,7 +40,7 @@
              <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span class="font-medium text-sm">{{ session('error') }}</span>
+            <span class="font-medium text-base">{{ session('error') }}</span>
         </div>
     @endif
 
@@ -57,22 +57,22 @@
                         </div>
                         <input type="text" name="search" value="{{ request('search') }}" 
                             style="padding-left: 3rem !important;"
-                            class="block w-full border border-gray-200 rounded-lg text-sm bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-teal-500 focus:border-teal-500 transition-colors py-2 pr-3" 
+                            class="block w-full border border-gray-200 rounded-lg text-base bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-teal-500 focus:border-teal-500 transition-colors py-2 pr-3" 
                             placeholder="Cari nama ibu...">
                     </div>
-                    <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
+                    <button type="submit" class="inline-flex items-center justify-center px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white text-base font-medium rounded-lg shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
                         Cari
                     </button>
                 </form>
             </div>
             <div class="flex flex-col md:flex-row gap-2 w-full md:w-auto">
-                <button type="button" @click="exportModal = true" class="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 flex-shrink-0 w-full md:w-auto">
+                <button type="button" @click="exportModal = true" class="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-base font-medium rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 flex-shrink-0 w-full md:w-auto">
                     <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                     Export Excel
                 </button>
-                <a href="{{ route('mothers.create') }}" class="inline-flex items-center justify-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 flex-shrink-0 w-full md:w-auto">
+                <a href="{{ route('mothers.create') }}" class="inline-flex items-center justify-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-base font-medium rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 flex-shrink-0 w-full md:w-auto">
                     <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -112,25 +112,25 @@
                                 </div>
                                 <div>
                                     <h3 class="text-lg font-bold text-gray-900">Export Rekap Ibu {{ $status == 'hamil' ? 'Hamil' : 'Menyusui' }}</h3>
-                                    <p class="text-sm text-gray-500">Berdasarkan tanggal kunjungan pemeriksaan.</p>
+                                    <p class="text-base text-gray-500">Berdasarkan tanggal kunjungan pemeriksaan.</p>
                                 </div>
                             </div>
 
                             <div class="space-y-4">
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Dari Tanggal</label>
-                                        <input type="date" name="start_date" class="block w-full border border-gray-200 rounded-lg text-sm bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
+                                        <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Dari Tanggal</label>
+                                        <input type="date" name="start_date" class="block w-full border border-gray-200 rounded-lg text-base bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sampai Tanggal</label>
-                                        <input type="date" name="end_date" class="block w-full border border-gray-200 rounded-lg text-sm bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
+                                        <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Sampai Tanggal</label>
+                                        <input type="date" name="end_date" class="block w-full border border-gray-200 rounded-lg text-base bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Posyandu</label>
-                                    <select name="health_post_id" class="block w-full border border-gray-200 rounded-lg text-sm bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
+                                    <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Posyandu</label>
+                                    <select name="health_post_id" class="block w-full border border-gray-200 rounded-lg text-base bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
                                         <option value="">Semua Posyandu</option>
                                         @foreach($healthPosts as $hp)
                                             <option value="{{ $hp->id }}">{{ $hp->name }}</option>
@@ -139,18 +139,18 @@
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Alamat (Keywords)</label>
-                                    <input type="text" name="address" placeholder="Contoh: Sukamaju" class="block w-full border border-gray-200 rounded-lg text-sm bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
+                                    <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Alamat (Keywords)</label>
+                                    <input type="text" name="address" placeholder="Contoh: Sukamaju" class="block w-full border border-gray-200 rounded-lg text-base bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 p-2.5 transition-all outline-none">
                                 </div>
                                 
                                 <p class="text-[10px] text-gray-400 italic">* Kosongkan untuk ekspor seluruh data</p>
                             </div>
                         </div>
                         <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row justify-end gap-2">
-                            <button type="button" @click="exportModal = false" class="inline-flex justify-center rounded-lg border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+                            <button type="button" @click="exportModal = false" class="inline-flex justify-center rounded-lg border border-gray-300 px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-100 transition-colors">
                                 Batal
                             </button>
-                            <button type="submit" class="inline-flex justify-center rounded-lg border border-transparent px-4 py-2 bg-emerald-600 text-sm font-medium text-white hover:bg-emerald-700 transition-colors shadow-sm">
+                            <button type="submit" class="inline-flex justify-center rounded-lg border border-transparent px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 transition-colors shadow-sm">
                                 Download Excel
                             </button>
                         </div>
@@ -162,7 +162,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-gray-50/50 border-b border-gray-100 text-gray-500 text-xs uppercase tracking-wider">
+                    <tr class="bg-gray-50/50 border-b border-gray-100 text-gray-500 text-sm uppercase tracking-wider">
                         <th class="px-6 py-4 font-semibold whitespace-nowrap">Nama Ibu</th>
                         <th class="px-6 py-4 font-semibold whitespace-nowrap">Usia</th>
                         <th class="px-6 py-4 font-semibold whitespace-nowrap">Telepon</th>
@@ -171,16 +171,16 @@
                         <th class="px-6 py-4 font-semibold text-right whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100 text-sm">
+                <tbody class="divide-y divide-gray-100 text-base">
                     @forelse($mothers as $mother)
                         <tr class="hover:bg-gray-50/80 transition-colors">
                             <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{{ $mother->name }}</td>
                             <td class="px-6 py-4 text-gray-600 whitespace-nowrap">
                                 {{ \Carbon\Carbon::parse($mother->birth_date)->age }} Tahun
                             </td>
-                            <td class="px-6 py-4 text-gray-600 font-mono text-xs whitespace-nowrap">{{ $mother->phone_number ?? '-' }}</td>
+                            <td class="px-6 py-4 text-gray-600 font-mono text-sm whitespace-nowrap">{{ $mother->phone_number ?? '-' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-100">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-red-50 text-red-700 border border-red-100">
                                     {{ $mother->blood_type }}
                                 </span>
                             </td>
@@ -192,7 +192,7 @@
         <select 
             name="status"
             onchange="this.form.submit()"
-            class="text-sm font-semibold rounded-lg px-3 py-2 border border-gray-200 shadow-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-200
+            class="text-base font-semibold rounded-lg px-3 py-2 border border-gray-200 shadow-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-200
 
             {{ $mother->status == 'hamil'
                 ? 'bg-pink-100 text-pink-700'
@@ -267,9 +267,9 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                         </svg>
                                     </div>
-                                    <h3 class="text-gray-900 font-medium text-sm mb-1">Belum ada data ibu {{ $status == 'hamil' ? 'hamil' : 'menyusui' }}</h3>
-                                    <p class="text-xs text-gray-500 mb-4">Silakan tambahkan data ibu baru.</p>
-                                    <a href="{{ route('mothers.create') }}" class="text-teal-600 hover:text-teal-700 text-sm font-medium hover:underline">+ Tambah Ibu</a>
+                                    <h3 class="text-gray-900 font-medium text-base mb-1">Belum ada data ibu {{ $status == 'hamil' ? 'hamil' : 'menyusui' }}</h3>
+                                    <p class="text-sm text-gray-500 mb-4">Silakan tambahkan data ibu baru.</p>
+                                    <a href="{{ route('mothers.create') }}" class="text-teal-600 hover:text-teal-700 text-base font-medium hover:underline">+ Tambah Ibu</a>
                                 </div>
                             </td>
                         </tr>
