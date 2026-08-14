@@ -27,14 +27,14 @@ class StoreMotherRequest extends FormRequest
             'identity_number' => 'required|string|max:255',
             'phone_number' => 'required|string|max:255',
             'address' => 'required|string|max:255',
-            'social_security_number' => 'required|string|max:255',
-            'health_facility' => 'required|in:Klinik,Puskesmas,RS',
+            'social_security_number' => 'nullable|string|max:255',
+            'health_facility' => 'nullable|in:Klinik,Puskesmas,RS',
             'birth_place' => 'required|string|max:255',
             'birth_date' => 'required|date|before_or_equal:today',
             'blood_type' => 'required|string|max:255',
             'height' => 'required|string|max:255',
             'weight' => 'required|string|max:255',
-            'status' => 'nullable|in:hamil,menyusui',
+            'status' => 'nullable|in:hamil,menyusui,lainnya',
         ];
     }
 
@@ -54,9 +54,7 @@ class StoreMotherRequest extends FormRequest
             'phone_number.max' => 'Nomor telepon ibu maksimal 255 karakter.',
             'address.required' => 'Alamat ibu wajib diisi.',
             'address.max' => 'Alamat ibu maksimal 255 karakter.',
-            'social_security_number.required' => 'Nomor asuransi ibu wajib diisi.',
             'social_security_number.max' => 'Nomor asuransi ibu maksimal 255 karakter.',
-            'health_facility.required' => 'Tipe faskes wajib dipilih.',
             'health_facility.in' => 'Tipe faskes harus berupa Klinik, Puskesmas, atau RS.',
             'birth_place.required' => 'Tempat lahir ibu wajib diisi.',
             'birth_place.max' => 'Tempat lahir ibu maksimal 255 karakter.',

@@ -10,6 +10,24 @@
         ['label' => 'Ubah Data']
     ]" />
 
+    @if(session('success'))
+        <div class="p-4 bg-green-50 text-green-700 rounded-xl border border-green-100 flex items-center shadow-sm" role="alert">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="font-medium text-base">{{ session('success') }}</span>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="p-4 bg-red-50 text-red-700 rounded-xl border border-red-100 flex items-center shadow-sm" role="alert">
+             <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="font-medium text-base">{{ session('error') }}</span>
+        </div>
+    @endif
+
     <div class="bg-white rounded-xl shadow-[0_0_20px_rgba(0,0,0,0.05)] border border-gray-100 overflow-hidden">
         <div class="p-6 border-b border-gray-100">
             <h2 class="text-lg font-bold text-gray-800">Form Ubah Data Ibu</h2>
@@ -71,8 +89,8 @@
 
                     <!-- Social Security Number (BPJS) Field -->
                     <div class="w-full">
-                        <label for="social_security_number" class="block text-base font-medium text-gray-700 mb-1">No. BPJS/KIS <span class="text-red-500">*</span></label>
-                        <input type="text" name="social_security_number" id="social_security_number" value="{{ old('social_security_number', $mother->social_security_number) }}" required
+                        <label for="social_security_number" class="block text-base font-medium text-gray-700 mb-1">No. BPJS/KIS <span class="text-sm text-gray-500">(Opsional)</span></label>
+                        <input type="text" name="social_security_number" id="social_security_number" value="{{ old('social_security_number', $mother->social_security_number) }}"
                             class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('social_security_number') border-red-500 bg-red-50 @enderror"
                             placeholder="Nomor BPJS Kesehatan">
                         @error('social_security_number')
@@ -82,10 +100,10 @@
 
                     <!-- Health Facility (Faskes) Field -->
                     <div class="w-full">
-                        <label for="health_facility" class="block text-base font-medium text-gray-700 mb-1">Faskes (BPJS) <span class="text-red-500">*</span></label>
-                        <select name="health_facility" id="health_facility" required
-                            class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('health_facility') border-red-500 bg-red-50 @enderror">
-                            <option value="">Pilih Tipe Faskes</option>
+                    <label for="health_facility" class="block text-base font-medium text-gray-700 mb-1">Faskes (BPJS) <span class="text-sm text-gray-500">(Opsional)</span></label>
+                    <select name="health_facility" id="health_facility"
+                     class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('health_facility') border-red-500 bg-red-50 @enderror">
+                     <option value="">Pilih Tipe Faskes</option>
                             <option value="Klinik" {{ old('health_facility', $mother->health_facility) == 'Klinik' ? 'selected' : '' }}>Klinik</option>
                             <option value="Puskesmas" {{ old('health_facility', $mother->health_facility) == 'Puskesmas' ? 'selected' : '' }}>Puskesmas</option>
                             <option value="RS" {{ old('health_facility', $mother->health_facility) == 'RS' ? 'selected' : '' }}>RS</option>
@@ -157,9 +175,10 @@
                     <div class="w-full">
                         <label for="status" class="block text-base font-medium text-gray-700 mb-1">Status <span class="text-red-500">*</span></label>
                         <select name="status" id="status" required
-                            class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('status') border-red-500 bg-red-50 @enderror">
-                            <option value="hamil" {{ old('status', $mother->status) == 'hamil' ? 'selected' : '' }}>Hamil</option>
-                            <option value="menyusui" {{ old('status', $mother->status) == 'menyusui' ? 'selected' : '' }}>Menyusui</option>
+                        class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('status') border-red-500 bg-red-50 @enderror">
+                        <option value="hamil" {{ old('status', $mother->status) == 'hamil' ? 'selected' : '' }}>Hamil</option>
+                        <option value="menyusui" {{ old('status', $mother->status) == 'menyusui' ? 'selected' : '' }}>Menyusui</option>
+                        <option value="lainnya" {{ old('status', $mother->status) == 'lainnya' ? 'selected' : '' }}>Anak > 2 Tahun</option>
                         </select>
                         @error('status')
                             <p class="mt-1 text-base text-red-600">{{ $message }}</p>
@@ -192,7 +211,6 @@
     </div>
 </div>
 @endsection
-
 <script
     src="{{ asset('js/thermometer.js') }}?v={{ filemtime(public_path('js/thermometer.js')) }}"
     defer
