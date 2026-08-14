@@ -152,16 +152,12 @@
 
                         {{-- Alat Ukur Tinggi Balita --}}
                         <div class="w-full">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">
-                                Alat Ukur Tinggi Balita
-                            </label>
-
                             <div class="flex flex-wrap items-center gap-2 mt-3">
 
                                 {{-- Tombol Hubungkan --}}
                                 <button type="button" id="connectiotScaleButton"
                                     class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
-                                    Hubungkan Alat
+                                    Hubungkan Alat Ukur Tinggi
                                 </button>
 
                                 {{-- Tombol Ambil Data --}}
@@ -216,7 +212,8 @@
 
                         <!-- BPJS Facility Field -->
                         <div class="w-full">
-                            <label for="bpjs_facility" class="block text-base font-medium text-gray-700 mb-1">Faskes (BPJS)
+                            <label for="bpjs_facility" class="block text-base font-medium text-gray-700 mb-1">Faskes
+                                (BPJS)
                                 <span class="text-sm text-gray-500">(Opsional)</span></label>
                             <select name="bpjs_facility" id="bpjs_facility"
                                 class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('bpjs_facility') border-red-500 bg-red-50 @enderror">

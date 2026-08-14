@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             statusText.textContent = "Mencari alat...";
 
-            statusText.className = "text-sm text-yellow-600";
+            statusText.className = "text-sm text-blue-600";
 
             // Tampilkan popup pilihan Bluetooth
             bluetoothDevice = await navigator.bluetooth.requestDevice({
@@ -92,9 +92,9 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             console.error("Gagal terhubung:", error);
 
-            statusText.textContent = "Gagal menghubungkan alat";
+            statusText.textContent = "Tidak ada perangkat Bluetooth yang dipilih.";
 
-            statusText.className = "text-sm text-red-600";
+            statusText.className = "text-sm text-yellow-600";
         }
     }
 
