@@ -6,11 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Children extends Model
 {
     /** @use HasFactory<\Database\Factories\ChildrenFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function ($child) {
+            $child->growthMonitorings()->delete();
+        });
+
+        static::restoring(function ($child) {
+            $child->growthMonitorings()->onlyTrashed()->restore();
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
