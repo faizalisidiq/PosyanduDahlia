@@ -249,3 +249,8 @@
         </div>
     </div>
 @endsection
+<script src="{{ asset('js/scale.js') }}?v={{ filemtime(public_path('js/scale.js')) }}" defer></script>
+<script src="{{ asset('js/iotScale.js') }}?v={{ filemtime(public_path('js/iotScale.js')) }}" defer></script>
+<script src="{{ asset('js/thermometer.js') }}?v={{ filemtime(public_path('js/thermometer.js')) }}" defer></script>
+
+<script src="{{ asset('js/vital-status.js') }}?v={{ filemtime(public_path('js/vital-status.js')) }}" defer></script>
