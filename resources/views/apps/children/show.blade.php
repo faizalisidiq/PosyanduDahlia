@@ -29,7 +29,7 @@
                 <p class="text-base text-gray-500">Ibu: {{ $children->mother->name }} | Gender: {{ $children->gender === 'male' ? 'Laki-laki' : 'Perempuan' }}</p>
             </div>
         </div>
-        
+
         <div class="flex items-center space-x-3">
             <a href="{{ route('childrens.edit', $children) }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 text-base font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -125,7 +125,7 @@
                  <div class="relative z-10">
                      <h3 class="font-bold text-lg mb-1">Status Pertumbuhan</h3>
                      <p class="text-indigo-100 text-base mb-4">Pengukuran terakhir.</p>
-                     
+
                      <div class="space-y-4">
                           <div class="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
                               <div class="text-sm text-indigo-100 uppercase">Berat Badan (BB)</div>
@@ -228,7 +228,7 @@
                     @php
                         $waLink = URL::signedRoute('childrens.public-export-history', $children);
                         $waMessage = "Halo Ibu " . $children->mother->name . ",\n\nBerikut adalah riwayat pertumbuhan anak Anda (" . $children->name . ").\nSilakan unduh melalui tautan berikut:\n" . $waLink;
-                        
+
                         $phone = $children->mother->phone_number ?? '';
                         $phone = preg_replace('/[^0-9]/', '', $phone);
                         if (str_starts_with($phone, '0')) {
@@ -236,7 +236,7 @@
                         }
                         $waUrl = "https://wa.me/" . $phone . "?text=" . urlencode($waMessage);
                     @endphp
-                    
+
                     <a href="{{ $waUrl }}" target="_blank" class="inline-flex items-center px-3 py-1.5 bg-green-50 text-green-700 border border-green-100 text-sm font-medium rounded-lg hover:bg-green-100 transition-colors">
                         Kirim WA
                     </a>

@@ -15,7 +15,7 @@
             <h2 class="text-lg font-bold text-gray-800">Form Ubah Data Ibu</h2>
             <p class="text-base text-gray-500">Perbarui informasi ibu hamil atau menyusui.</p>
         </div>
-        
+
         <form action="{{ route('mothers.update', $mother) }}" method="POST" class="p-6 space-y-8" autocomplete="off">
             @csrf
             @method('PUT')
@@ -23,7 +23,7 @@
             <!-- Personal Identity Section -->
             <div class="space-y-4">
                 <h3 class="text-base font-semibold text-teal-700 uppercase tracking-wider border-b border-gray-100 pb-2">Identitas Diri</h3>
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Name Field -->
                     <div class="w-full">
@@ -192,3 +192,16 @@
     </div>
 </div>
 @endsection
+
+<script
+    src="{{ asset('js/thermometer.js') }}?v={{ filemtime(public_path('js/thermometer.js')) }}"
+    defer
+></script>
+<script
+    src="{{ asset('js/tensimeter.js') }}?v={{ filemtime(public_path('js/tensimeter.js')) }}"
+    defer
+></script>
+<script
+    src="{{ asset('js/vital-status.js') }}?v={{ filemtime(public_path('js/vital-status.js')) }}"
+    defer
+></script>

@@ -15,7 +15,7 @@
             <h2 class="text-lg font-bold text-gray-800">Form Ubah Data Anak</h2>
             <p class="text-base text-gray-500">Perbarui informasi anak.</p>
         </div>
-        
+
         <form action="{{ route('childrens.update', $children) }}" method="POST" class="p-6 space-y-8" autocomplete="off">
             @csrf
             @method('PUT')
@@ -23,7 +23,7 @@
             <!-- Child Identity Section -->
             <div class="space-y-4">
                 <h3 class="text-base font-semibold text-teal-700 uppercase tracking-wider border-b border-gray-100 pb-2">Data Anak</h3>
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Identity Number Field (NIK) -->
                     <div class="w-full">

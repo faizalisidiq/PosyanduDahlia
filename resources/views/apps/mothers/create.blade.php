@@ -15,14 +15,14 @@
             <h2 class="text-lg font-bold text-gray-800">Form Tambah Data Ibu</h2>
             <p class="text-base text-gray-500">Isi informasi untuk mendaftarkan ibu hamil atau menyusui baru.</p>
         </div>
-        
+
         <form action="{{ route('mothers.store') }}" method="POST" class="p-6 space-y-8" autocomplete="off">
             @csrf
 
             <!-- Personal Identity Section -->
             <div class="space-y-4">
                 <h3 class="text-base font-semibold text-teal-700 uppercase tracking-wider border-b border-gray-100 pb-2">Identitas Diri</h3>
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Name Field -->
                     <div class="w-full">
@@ -78,7 +78,7 @@
                             <p class="mt-1 text-base text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                    
+
                     <!-- Health Facility (Faskes) Field -->
                     <div class="w-full">
                         <label for="health_facility" class="block text-base font-medium text-gray-700 mb-1">Faskes (BPJS) <span class="text-red-500">*</span></label>
@@ -191,3 +191,16 @@
     </div>
 </div>
 @endsection
+
+<script
+    src="{{ asset('js/thermometer.js') }}?v={{ filemtime(public_path('js/thermometer.js')) }}"
+    defer
+></script>
+<script
+    src="{{ asset('js/tensimeter.js') }}?v={{ filemtime(public_path('js/tensimeter.js')) }}"
+    defer
+></script>
+<script
+    src="{{ asset('js/vital-status.js') }}?v={{ filemtime(public_path('js/vital-status.js')) }}"
+    defer
+></script>
