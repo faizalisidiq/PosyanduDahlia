@@ -3,9 +3,12 @@
 @section('title', 'Tambah Anak')
 
 @section('content')
-    <div class="w-full mx-auto space-y-6">
-        <!-- Breadcrumb -->
-        <x-breadcrumb :items="[['label' => 'Data Anak', 'url' => route('childrens.index')], ['label' => 'Tambah Baru']]" />
+<div class="w-full mx-auto space-y-6">
+    <!-- Breadcrumb -->
+    <x-breadcrumb :items="[
+        ['label' => 'Data Anak', 'url' => route('childrens.index')],
+        ['label' => 'Tambah Baru']
+    ]" />
 
         <div class="bg-white rounded-xl shadow-[0_0_20px_rgba(0,0,0,0.05)] border border-gray-100 overflow-hidden">
             <div class="p-6 border-b border-gray-100">
@@ -246,7 +249,6 @@
         </div>
     </div>
 @endsection
-
 <script src="{{ asset('js/scale.js') }}?v={{ filemtime(public_path('js/scale.js')) }}" defer></script>
 <script src="{{ asset('js/iotScale.js') }}?v={{ filemtime(public_path('js/iotScale.js')) }}" defer></script>
 <script src="{{ asset('js/thermometer.js') }}?v={{ filemtime(public_path('js/thermometer.js')) }}" defer></script>

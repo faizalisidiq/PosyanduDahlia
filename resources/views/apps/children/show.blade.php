@@ -107,6 +107,7 @@
                             <p class="text-gray-900 font-medium">{{ $children->birth_height }} cm</p>
                         </div>
                         <div>
+                            <label class="block text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Faskes (BPJS)</label>
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Suhu Tubuh</label>
                             <p class="text-gray-900 font-medium">
                                 {{ $children->temperature ? number_format($children->temperature, 1) . '°C' : '-' }}
