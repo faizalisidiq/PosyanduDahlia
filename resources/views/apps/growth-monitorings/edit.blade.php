@@ -3,12 +3,12 @@
 @section('title', 'Ubah Pemantauan')
 
 @section('content')
-<div class="w-full mx-auto space-y-6">
-    <!-- Breadcrumb -->
-    <x-breadcrumb :items="[
-        ['label' => 'Pemantauan Pertumbuhan', 'url' => route('growth-monitorings.index')],
-        ['label' => 'Ubah Data']
-    ]" />
+    <div class="w-full mx-auto space-y-6">
+        <!-- Breadcrumb -->
+        <x-breadcrumb :items="[
+            ['label' => 'Pemantauan Pertumbuhan', 'url' => route('growth-monitorings.index')],
+            ['label' => 'Ubah Data'],
+        ]" />
 
         <div class="bg-white rounded-xl shadow-[0_0_20px_rgba(0,0,0,0.05)] border border-gray-100 overflow-hidden">
             <div class="p-6 border-b border-gray-100">
@@ -203,7 +203,8 @@
                                         <p>Nilai <strong>Z-Score</strong> saat ini:
                                             <strong>{{ $growthMonitoring->z_score }}</strong>
                                             ({{ $growthMonitoring->status }}). Nilai akan dihitung ulang otomatis jika
-                                            Berat Badan atau Tanggal diubah.</p>
+                                            Berat Badan atau Tanggal diubah.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -238,3 +239,8 @@
         </div>
     </div>
 @endsection
+<script src="{{ asset('js/scale.js') }}?v={{ filemtime(public_path('js/scale.js')) }}" defer></script>
+<script src="{{ asset('js/iotScale.js') }}?v={{ filemtime(public_path('js/iotScale.js')) }}" defer></script>
+<script src="{{ asset('js/thermometer.js') }}?v={{ filemtime(public_path('js/thermometer.js')) }}" defer></script>
+
+<script src="{{ asset('js/vital-status.js') }}?v={{ filemtime(public_path('js/vital-status.js')) }}" defer></script>
