@@ -170,14 +170,14 @@
                             </span>
                         </div>
 
-                        {{-- Alat Ukur Tinggi Balita --}}
+                        {{-- Alat Ukur Tinggi dan Berat Balita --}}
                         <div class="w-full">
                             <div class="flex flex-wrap items-center gap-2 mt-3">
 
                                 {{-- Tombol Hubungkan --}}
                                 <button type="button" id="connectiotScaleButton"
                                     class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
-                                    Hubungkan Alat Ukur Tinggi
+                                    Hubungkan Alat Ukur Tinggi dan Berat Balita
                                 </button>
 
                                 {{-- Tombol Ambil Data --}}
@@ -188,7 +188,8 @@
 
                                 {{-- Tombol Putuskan --}}
                                 <button type="button" id="disconnectiotScaleButton"
-                                    class="hidden px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all">
+                                    class="hidden px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all"
+                                    style="background:red !important; color:white !important;">
                                     Putuskan Alat
                                 </button>
 

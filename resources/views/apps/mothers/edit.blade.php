@@ -202,6 +202,37 @@
                             @enderror
                         </div>
 
+                        {{-- Alat Ukur Tinggi dan Berat --}}
+                        <div class="w-full">
+                            <div class="flex flex-wrap items-center gap-2 mt-3">
+
+                                {{-- Tombol Hubungkan --}}
+                                <button type="button" id="connectiotScaleButton"
+                                    class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
+                                    Hubungkan Alat Ukur Tinggi dan Berat
+                                </button>
+
+                                {{-- Tombol Ambil Data --}}
+                                <button type="button" id="measureiotScaleButton"
+                                    class="hidden px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all">
+                                    Ambil Data
+                                </button>
+
+                                {{-- Tombol Putuskan --}}
+                                <button type="button" id="disconnectiotScaleButton"
+                                    class="hidden px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all"
+                                    style="background:red !important; color:white !important;">
+                                    Putuskan Alat
+                                </button>
+
+                                {{-- Status --}}
+                                <span id="iotscaleStatus" class="text-sm text-gray-500">
+                                    Alat belum terhubung
+                                </span>
+
+                            </div>
+                        </div>
+
                         <!-- Temperature Field -->
                         <div class="w-full">
                             <label for="temperature" class="block text-sm font-medium text-gray-700 mb-1">
@@ -330,6 +361,7 @@
         </div>
     </div>
 @endsection
+<script src="{{ asset('js/iotScale.js') }}?v={{ filemtime(public_path('js/iotScale.js')) }}" defer></script>
 <script src="{{ asset('js/thermometer.js') }}?v={{ filemtime(public_path('js/thermometer.js')) }}" defer></script>
 <script src="{{ asset('js/tensimeter.js') }}?v={{ filemtime(public_path('js/tensimeter.js')) }}" defer></script>
 <script src="{{ asset('js/vital-status.js') }}?v={{ filemtime(public_path('js/vital-status.js')) }}" defer></script>

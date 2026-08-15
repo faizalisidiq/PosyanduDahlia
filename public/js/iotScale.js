@@ -16,9 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const statusText = document.getElementById("iotscaleStatus");
 
     // Hasil data akan dimasukkan ke sini
-    const heightInput = document.getElementById("birth_height");
+    const heightInput = document.getElementById("birth_height") || document.getElementById("height");
     // TAMBAHAN: Element untuk input berat badan (Sesuaikan ID-nya dengan HTML Anda)
-    const weightInput = document.getElementById("birth_weight");
+    const weightInput = document.getElementById("birth_weight") || document.getElementById("weight");
 
     // ==========================================
     // VARIABEL BLE
