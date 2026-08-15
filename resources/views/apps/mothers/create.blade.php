@@ -7,28 +7,6 @@
         <!-- Breadcrumb -->
         <x-breadcrumb :items="[['label' => 'Data Ibu', 'url' => route('mothers.index')], ['label' => 'Tambah Baru']]" />
 
-        @if (session('success'))
-            <div class="p-4 bg-green-50 text-green-700 rounded-xl border border-green-100 flex items-center shadow-sm"
-                role="alert">
-                <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="font-medium text-base">{{ session('success') }}</span>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="p-4 bg-red-50 text-red-700 rounded-xl border border-red-100 flex items-center shadow-sm"
-                role="alert">
-                <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="font-medium text-base">{{ session('error') }}</span>
-            </div>
-        @endif
-
         <div class="bg-white rounded-xl shadow-[0_0_20px_rgba(0,0,0,0.05)] border border-gray-100 overflow-hidden">
             <div class="p-6 border-b border-gray-100">
                 <h2 class="text-lg font-bold text-gray-800">Form Tambah Data Ibu</h2>
@@ -40,8 +18,7 @@
 
                 <!-- Personal Identity Section -->
                 <div class="space-y-4">
-                    <h3
-                        class="text-base font-semibold text-teal-700 uppercase tracking-wider border-b border-gray-100 pb-2">
+                    <h3 class="text-sm font-semibold text-teal-700 uppercase tracking-wider border-b border-gray-100 pb-2">
                         Identitas Diri</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
