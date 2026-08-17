@@ -157,4 +157,177 @@ class StaffController extends Controller
         $staff->update(['status' => 'active']);
         return redirect()->back()->with('success', 'Staff registration approved successfully.');
     }
+
+    /**
+     * Get tasks for the staff.
+     */
+    public function getTasks(Staff $staff)
+    {
+        // 1. Check if phone is empty
+        if (empty($staff->phone)) {
+            return response()->json([
+                'success' => false,
+                'error' => 'phone_empty',
+                'message' => 'Nomor WhatsApp staff belum tersedia.'
+            ]);
+        }
+
+        // 2. Format phone number
+        $formattedPhone = $this->formatPhoneNumber($staff->phone);
+
+        // 3. Fetch related tasks
+        $pregnancyRecords = $staff->pregnancyRecords()->with('mother')->get();
+        $childbirthRecords = \App\Models\ChildbirthRecord::where('staff_id', $staff->id)->with(['mother', 'children'])->get();
+        $growthMonitorings = $staff->growthMonitorings()->with('child')->get();
+        $ilpScreenings = $staff->ilpScreenings()->with('subjectable')->get();
+
+        $mothers = collect();
+        $children = collect();
+        $elderlies = collect();
+
+        // DATA IBU
+        foreach ($pregnancyRecords as $record) {
+            if ($record->mother) {
+                $mothers->push($record->mother->name);
+            }
+        }
+        foreach ($childbirthRecords as $record) {
+            if ($record->mother) {
+                $mothers->push($record->mother->name);
+            }
+        }
+        foreach ($ilpScreenings as $record) {
+            if ($record->subjectable_type === 'App\Models\Mother' && $record->subjectable) {
+                $mothers->push($record->subjectable->name);
+            }
+        }
+
+        // DATA BALITA
+        foreach ($growthMonitorings as $record) {
+            if ($record->child) {
+                $children->push($record->child->name);
+            }
+        }
+        foreach ($childbirthRecords as $record) {
+            if ($record->children) {
+                $children->push($record->children->name);
+            }
+        }
+        foreach ($ilpScreenings as $record) {
+            if ($record->subjectable_type === 'App\Models\Children' && $record->subjectable) {
+                $children->push($record->subjectable->name);
+            }
+        }
+
+        // DATA LANSIA
+        foreach ($ilpScreenings as $record) {
+            if ($record->subjectable_type === 'App\Models\Elderly' && $record->subjectable) {
+                $elderlies->push($record->subjectable->name);
+            }
+        }
+
+        $mothers = $mothers->unique()->sort()->values();
+        $children = $children->unique()->sort()->values();
+        $elderlies = $elderlies->unique()->sort()->values();
+
+        // 4. Check if tasks are empty
+        if ($mothers->isEmpty() && $children->isEmpty() && $elderlies->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'error' => 'tasks_empty',
+                'message' => 'Belum ada data pemeriksaan yang ditugaskan kepada staff ini.'
+            ]);
+        }
+
+        // 5. Generate formatted message
+        $name = $staff->user->name;
+        $message = "Halo {$name},\n\nBerikut daftar tugas pemeriksaan Anda.\n\n";
+
+        $categoriesCount = 0;
+        if ($mothers->isNotEmpty()) $categoriesCount++;
+        if ($children->isNotEmpty()) $categoriesCount++;
+        if ($elderlies->isNotEmpty()) $categoriesCount++;
+
+        $useDivider = $categoriesCount > 1;
+
+        if ($mothers->isNotEmpty()) {
+            if ($useDivider) {
+                $message .= "========================\n\n";
+            }
+            $message .= "DATA IBU\n\n";
+            foreach ($mothers as $mother) {
+                $message .= "• {$mother}\n";
+            }
+            $message .= "\n";
+        }
+
+        if ($children->isNotEmpty()) {
+            if ($useDivider) {
+                $message .= "========================\n\n";
+            }
+            $message .= "DATA BALITA\n\n";
+            foreach ($children as $child) {
+                $message .= "• {$child}\n";
+            }
+            $message .= "\n";
+        }
+
+        if ($elderlies->isNotEmpty()) {
+            if ($useDivider) {
+                $message .= "========================\n\n";
+            }
+            $message .= "DATA LANSIA\n\n";
+            foreach ($elderlies as $elderly) {
+                $message .= "• {$elderly}\n";
+            }
+            $message .= "\n";
+        }
+
+        if ($useDivider) {
+            $message .= "========================\n\n";
+        }
+
+        $message .= "Silakan melakukan pemeriksaan sesuai jadwal.\n\nTerima kasih.";
+
+        return response()->json([
+            'success' => true,
+            'phone' => $formattedPhone,
+            'message' => $message,
+            'tasks' => [
+                'mothers' => $mothers,
+                'children' => $children,
+                'elderlies' => $elderlies,
+            ]
+        ]);
+    }
+
+    /**
+     * Format Indonesian phone numbers to international standard format.
+     */
+    private function formatPhoneNumber($phone)
+    {
+        if (empty($phone)) {
+            return null;
+        }
+        
+        // Remove any non-numeric characters
+        $clean = preg_replace('/[^0-9]/', '', $phone);
+        
+        // If it starts with 0, replace the leading 0 with 62
+        if (str_starts_with($clean, '0')) {
+            $clean = '62' . substr($clean, 1);
+        }
+        
+        // If it starts with 62, return it
+        if (str_starts_with($clean, '62')) {
+            return $clean;
+        }
+        
+        // If it starts with 8, prepend 62
+        if (str_starts_with($clean, '8')) {
+            $clean = '62' . $clean;
+        }
+
+        return $clean;
+    }
 }

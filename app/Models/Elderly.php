@@ -4,11 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Elderly extends Model
 {
     /** @use HasFactory<\Database\Factories\ElderlyFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function ($elderly) {
+            $elderly->screenings()->delete();
+        });
+
+        static::restoring(function ($elderly) {
+            $elderly->screenings()->onlyTrashed()->restore();
+        });
+    }
 
     /**
      * The attributes that are mass assignable.

@@ -21,13 +21,13 @@
     <form action="{{ route('queues.public.check') }}" method="POST">
         @csrf
         <div class="mb-6">
-            <label for="identity_number" class="block text-sm font-medium text-gray-700 mb-2">Nomor Induk Kependudukan (NIK)
+            <label for="identity_number" class="block text-base font-medium text-gray-700 mb-2">Nomor Induk Kependudukan (NIK)
                 Ibu</label>
             <input type="text" id="identity_number" name="identity_number"
                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
                 placeholder="Contoh: 3201234567890001" required value="{{ old('identity_number') }}" autofocus>
             @error('identity_number')
-                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                <p class="mt-2 text-base text-red-600">{{ $message }}</p>
             @enderror
         </div>
 
@@ -37,7 +37,7 @@
         </button>
 
         <div class="mt-6 text-center">
-            <a href="/" class="text-sm text-gray-500 hover:text-teal-600 transition-colors">Kembali ke Beranda</a>
+            <a href="/" class="text-base text-gray-500 hover:text-teal-600 transition-colors">Kembali ke Beranda</a>
         </div>
     </form>
 @endsection

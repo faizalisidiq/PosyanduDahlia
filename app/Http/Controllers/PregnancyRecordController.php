@@ -14,7 +14,14 @@ class PregnancyRecordController extends Controller
      */
     public function index(Request $request)
     {
+        $user = auth()->user();
+        $staff = $user->staff;
+        $hasFullAccess = $staff && $staff->role === 'ketua-kader';
+
         $pregnancyRecords = PregnancyRecord::with(['mother', 'staff.user'])
+            ->when(!$hasFullAccess && $staff, function ($query) use ($staff) {
+                $query->where('staff_id', $staff->id);
+            })
             ->when($request->search, function ($query) use ($request) {
                 $query->whereHas('mother', function ($q) use ($request) {
                     $q->where('name', 'like', "%{$request->search}%");
@@ -31,9 +38,10 @@ class PregnancyRecordController extends Controller
      */
     public function create()
     {
+        $preselectedMotherId = request('mother_id');
         $mothers = \App\Models\Mother::all();
         $staffs = \App\Models\Staff::with('user')->get();
-        return view('apps.pregnancy-records.create', compact('mothers', 'staffs'));
+        return view('apps.pregnancy-records.create', compact('mothers', 'staffs', 'preselectedMotherId'));
     }
 
     /**
@@ -54,9 +62,9 @@ class PregnancyRecordController extends Controller
                 $mother->update(['weight' => $data['weight']]);
             });
             
-            return redirect()->route('pregnancy-records.index')->with('success', 'Pregnancy Record created successfully.');
+            return redirect()->route('mothers.show', [$data['mother_id'], 'tab' => 'pemeriksaan'])->with('success', 'Pemeriksaan kehamilan berhasil disimpan.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to create pregnancy record: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menyimpan pemeriksaan kehamilan: ' . $e->getMessage());
         }
     }
 
@@ -95,9 +103,9 @@ class PregnancyRecordController extends Controller
                 $pregnancyRecord->mother->update(['weight' => $data['weight']]);
             });
             
-            return redirect()->route('pregnancy-records.index')->with('success', 'Pregnancy Record updated successfully.');
+            return redirect()->route('mothers.show', [$pregnancyRecord->mother_id, 'tab' => 'pemeriksaan'])->with('success', 'Pemeriksaan kehamilan berhasil diperbarui.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to update pregnancy record: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal memperbarui pemeriksaan kehamilan: ' . $e->getMessage());
         }
     }
 
@@ -107,11 +115,12 @@ class PregnancyRecordController extends Controller
     public function destroy(PregnancyRecord $pregnancyRecord)
     {
         try {
+            $motherId = $pregnancyRecord->mother_id;
             $pregnancyRecord->deleteOrFail();
             
-            return redirect()->route('pregnancy-records.index')->with('success', 'Pregnancy Record deleted successfully.');
+            return redirect()->route('mothers.show', [$motherId, 'tab' => 'pemeriksaan'])->with('success', 'Pemeriksaan kehamilan berhasil diarsipkan.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to delete pregnancy record: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal mengarsipkan pemeriksaan kehamilan: ' . $e->getMessage());
         }
     }
 }

@@ -8,7 +8,7 @@ import os
 
 # ==== KONFIGURASI ====
 DEVICE_MAC = "C8:32:EA:6B:BE:2A"   # ganti kalau MAC alat kalian beda
-LARAVEL_URL = "http://127.0.0.1:8000/api/vitals/tensi"
+LARAVEL_URL = "https://posyandudahlia.cloud/api/vitals/tensi"
 CEK_SETIAP_DETIK = 10               # jeda antar pengecekan
 FILE_PENANDA_TERAKHIR = "last_sent_urutan.txt"
 

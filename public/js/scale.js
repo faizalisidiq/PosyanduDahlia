@@ -1,18 +1,22 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     let bluetoothDevice = null;
     let bluetoothCharacteristic = null;
 
-    const connectButton = document.getElementById('connectScaleButton');
-    const disconnectButton = document.getElementById('disconnectScaleButton');
+    const connectButton = document.getElementById("connectScaleButton");
+    const disconnectButton = document.getElementById("disconnectScaleButton");
 
-    const statusElement = document.getElementById('scaleStatus');
-    const measurementInfo = document.getElementById('measurementInfo');
+    const statusElement = document.getElementById("scaleStatus");
+    const measurementInfo = document.getElementById("measurementInfo");
 
-    const weightInput = document.getElementById('birth_weight');
-    const heightInput = document.getElementById('birth_height');
+    const weightInput =
+        document.getElementById("birth_weight") ||
+        document.getElementById("weight");
+    const heightInput =
+        document.getElementById("birth_height") ||
+        document.getElementById("height");
 
-    const SERVICE_UUID = '0000fff0-0000-1000-8000-00805f9b34fb';
-    const CHARACTERISTIC_UUID = '0000fff1-0000-1000-8000-00805f9b34fb';
+    const SERVICE_UUID = "0000fff0-0000-1000-8000-00805f9b34fb";
+    const CHARACTERISTIC_UUID = "0000fff1-0000-1000-8000-00805f9b34fb";
 
     let lastWeightKg = null;
     let lastHeightCm = null;
@@ -26,17 +30,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    function setStatus(message, color = 'gray') {
+    function setStatus(message, color = "gray") {
         if (!statusElement) {
             return;
         }
 
         const colorClasses = {
-            gray: 'text-gray-500',
-            blue: 'text-blue-600',
-            green: 'text-green-600',
-            red: 'text-red-600',
-            yellow: 'text-yellow-600'
+            gray: "text-gray-500",
+            blue: "text-blue-600",
+            green: "text-green-600",
+            red: "text-red-600",
+            yellow: "text-yellow-600",
         };
 
         statusElement.className = `text-sm ${colorClasses[color] || colorClasses.gray}`;
@@ -48,13 +52,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const weightText = weightKg !== null
-            ? `${weightKg.toFixed(3).replace('.', ',')} kg`
-            : '-';
+        const weightText =
+            weightKg !== null
+                ? `${weightKg.toFixed(3).replace(".", ",")} kg`
+                : "-";
 
-        const heightText = heightCm !== null
-            ? `${heightCm.toFixed(1).replace('.', ',')} cm`
-            : '-';
+        const heightText =
+            heightCm !== null
+                ? `${heightCm.toFixed(1).replace(".", ",")} cm`
+                : "-";
 
         measurementInfo.textContent = isStable
             ? `Data stabil: BB ${weightText}, PB ${heightText}`
@@ -66,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return null;
         }
 
-        if (bytes[0] !== 0xFF || bytes[1] !== 0xA5) {
+        if (bytes[0] !== 0xff || bytes[1] !== 0xa5) {
             return null;
         }
 
@@ -86,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
             weightKg: rawWeightGram > 0 ? rawWeightGram / 1000 : null,
             heightCm: rawHeightTenthCm > 0 ? rawHeightTenthCm / 10 : null,
             rawWeightGram,
-            rawHeightTenthCm
+            rawHeightTenthCm,
         };
     }
 
@@ -96,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const bytes = new Uint8Array(
             value.buffer,
             value.byteOffset,
-            value.byteLength
+            value.byteLength,
         );
 
         const measurement = parseMeasurement(bytes);
@@ -109,14 +115,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (weightKg !== null) {
             weightInput.value = weightKg.toFixed(3);
-            weightInput.dispatchEvent(new Event('input', { bubbles: true }));
-            weightInput.dispatchEvent(new Event('change', { bubbles: true }));
+            weightInput.dispatchEvent(new Event("input", { bubbles: true }));
+            weightInput.dispatchEvent(new Event("change", { bubbles: true }));
         }
 
         if (heightCm !== null) {
             heightInput.value = heightCm.toFixed(1);
-            heightInput.dispatchEvent(new Event('input', { bubbles: true }));
-            heightInput.dispatchEvent(new Event('change', { bubbles: true }));
+            heightInput.dispatchEvent(new Event("input", { bubbles: true }));
+            heightInput.dispatchEvent(new Event("change", { bubbles: true }));
         }
 
         const sameWeight = weightKg === lastWeightKg;
@@ -136,17 +142,17 @@ document.addEventListener('DOMContentLoaded', () => {
         updateMeasurementInfo(weightKg, heightCm, isStable);
 
         if (isStable) {
-            setStatus('Timbangan terhubung. Data pengukuran stabil.', 'green');
+            setStatus("Timbangan terhubung. Data pengukuran stabil.", "green");
         } else {
-            setStatus('Timbangan terhubung. Membaca data...', 'blue');
+            setStatus("Timbangan terhubung. Membaca data...", "blue");
         }
 
-        console.log('Data timbangan:', {
+        console.log("Data timbangan:", {
             weightKg,
             heightCm,
             rawPacket: Array.from(bytes)
-                .map(byte => byte.toString(16).padStart(2, '0').toUpperCase())
-                .join('-')
+                .map((byte) => byte.toString(16).padStart(2, "0").toUpperCase())
+                .join("-"),
         });
     }
 
@@ -154,87 +160,89 @@ document.addEventListener('DOMContentLoaded', () => {
         bluetoothDevice = null;
         bluetoothCharacteristic = null;
 
-        connectButton.classList.remove('hidden');
-        disconnectButton.classList.add('hidden');
+        connectButton.classList.remove("hidden");
+        disconnectButton.classList.add("hidden");
 
-        setStatus('Koneksi timbangan terputus.', 'red');
+        setStatus("Koneksi timbangan terputus.", "red");
 
         if (measurementInfo) {
             measurementInfo.textContent =
-                'Timbangan terputus. Hubungkan ulang untuk melanjutkan pengukuran.';
+                "Timbangan terputus. Hubungkan ulang untuk melanjutkan pengukuran.";
         }
     }
 
     async function connectScale() {
         if (!navigator.bluetooth) {
-            setStatus('Browser ini tidak mendukung Bluetooth Web.', 'red');
+            setStatus("Browser ini tidak mendukung Bluetooth Web.", "red");
 
             alert(
-                'Gunakan Google Chrome atau Microsoft Edge. ' +
-                'Pastikan Bluetooth perangkat aktif.'
+                "Gunakan Google Chrome atau Microsoft Edge. " +
+                    "Pastikan Bluetooth perangkat aktif.",
             );
 
             return;
         }
 
         try {
-            setStatus('Mencari timbangan...', 'blue');
+            setStatus("Mencari timbangan...", "blue");
 
             bluetoothDevice = await navigator.bluetooth.requestDevice({
                 filters: [
                     {
-                        namePrefix: 'SENSSUN'
-                    }
+                        namePrefix: "SENSSUN",
+                    },
                 ],
-                optionalServices: [SERVICE_UUID]
+                optionalServices: [SERVICE_UUID],
             });
 
             bluetoothDevice.addEventListener(
-                'gattserverdisconnected',
-                handleDisconnected
+                "gattserverdisconnected",
+                handleDisconnected,
             );
 
             setStatus(
-                `Menghubungkan ke ${bluetoothDevice.name || 'timbangan'}...`,
-                'blue'
+                `Menghubungkan ke ${bluetoothDevice.name || "timbangan"}...`,
+                "blue",
             );
 
             const server = await bluetoothDevice.gatt.connect();
 
             const service = await server.getPrimaryService(SERVICE_UUID);
 
-            bluetoothCharacteristic = await service.getCharacteristic(
-                CHARACTERISTIC_UUID
-            );
+            bluetoothCharacteristic =
+                await service.getCharacteristic(CHARACTERISTIC_UUID);
 
             await bluetoothCharacteristic.startNotifications();
 
             bluetoothCharacteristic.addEventListener(
-                'characteristicvaluechanged',
-                handleNotification
+                "characteristicvaluechanged",
+                handleNotification,
             );
 
-            connectButton.classList.add('hidden');
-            disconnectButton.classList.remove('hidden');
+            connectButton.classList.add("hidden");
+            disconnectButton.classList.remove("hidden");
 
             setStatus(
-                `Terhubung ke ${bluetoothDevice.name || 'SENSSUN GROWTH'}.`,
-                'green'
+                `Terhubung ke ${bluetoothDevice.name || "SENSSUN GROWTH"}.`,
+                "green",
             );
 
             if (measurementInfo) {
                 measurementInfo.textContent =
-                    'Silakan timbang dan ukur bayi. Nilai akan masuk otomatis.';
+                    "Silakan timbang dan ukur bayi. Nilai akan masuk otomatis.";
             }
         } catch (error) {
             console.error(error);
 
-            if (error.name === 'NotFoundError') {
-                setStatus('Tidak ada perangkat Bluetooth yang dipilih.', 'yellow');
+            if (error.name === "NotFoundError") {
+                setStatus(
+                    "Tidak ada perangkat Bluetooth yang dipilih.",
+                    "yellow",
+                );
                 return;
             }
 
-            setStatus(`Gagal terhubung: ${error.message}`, 'red');
+            setStatus(`Gagal terhubung: ${error.message}`, "red");
         }
     }
 
@@ -247,6 +255,6 @@ document.addEventListener('DOMContentLoaded', () => {
         handleDisconnected();
     }
 
-    connectButton.addEventListener('click', connectScale);
-    disconnectButton.addEventListener('click', disconnectScale);
+    connectButton.addEventListener("click", connectScale);
+    disconnectButton.addEventListener("click", disconnectScale);
 });

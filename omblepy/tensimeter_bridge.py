@@ -8,7 +8,7 @@ import json
 
 # ==== KONFIGURASI ====
 DEVICE_MAC = "C8:32:EA:6B:BE:2A"   # ganti kalau MAC alat kalian beda
-LARAVEL_URL = "http://127.0.0.1:8000/api/vitals/tensi"
+LARAVEL_URL = "https://posyandudahlia.cloud/api/vitals/tensi"
 
 RX_UUID = "49123040-aee8-11e1-a74d-0002a5d5c51b"
 TX_UUID = "db5b55e0-aee7-11e1-965e-0002a5d5c51b"
