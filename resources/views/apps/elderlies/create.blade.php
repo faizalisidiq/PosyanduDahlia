@@ -2,263 +2,1148 @@
 
 @section('title', 'Tambah Lansia')
 
-@section('content')
-    <div class="w-full mx-auto space-y-6">
-        <!-- Breadcrumb -->
-        <x-breadcrumb :items="[['label' => 'Data Lansia', 'url' => route('elderlies.index')], ['label' => 'Tambah Baru']]" />
+@section('content') <div class="w-full mx-auto space-y-6">
 
-        <div class="bg-white rounded-xl shadow-[0_0_20px_rgba(0,0,0,0.05)] border border-gray-100 overflow-hidden">
-            <div class="p-6 border-b border-gray-100">
-                <h2 class="text-lg font-bold text-gray-800">Form Tambah Lansia</h2>
-                <p class="text-base text-gray-500">Isi informasi untuk mendaftarkan lansia baru.</p>
+```
+    <!-- Breadcrumb -->
+    <x-breadcrumb
+        :items="[
+            ['label' => 'Data Lansia', 'url' => route('elderlies.index')],
+            ['label' => 'Tambah Baru']
+        ]"
+    />
+
+    <!-- Flash Message -->
+    @if (session('success'))
+        <div
+            class="p-4 bg-green-50 text-green-700 rounded-xl border border-green-100
+                   flex items-center shadow-sm"
+            role="alert"
+        >
+            <svg
+                class="w-5 h-5 mr-3 flex-shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0"
+                />
+            </svg>
+
+            <span class="font-medium text-base">
+                {{ session('success') }}
+            </span>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div
+            class="p-4 bg-red-50 text-red-700 rounded-xl border border-red-100
+                   flex items-center shadow-sm"
+            role="alert"
+        >
+            <svg
+                class="w-5 h-5 mr-3 flex-shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0"
+                />
+            </svg>
+
+            <span class="font-medium text-base">
+                {{ session('error') }}
+            </span>
+        </div>
+    @endif
+
+
+    <!-- =========================================================
+         MAIN CARD
+    ========================================================== -->
+
+    <div
+        class="bg-white rounded-xl
+               shadow-[0_0_20px_rgba(0,0,0,0.05)]
+               border border-gray-100 overflow-hidden"
+    >
+
+        <!-- Header -->
+        <div class="p-6 border-b border-gray-100">
+
+            <h2 class="text-lg font-bold text-gray-800">
+                Form Tambah Lansia
+            </h2>
+
+            <p class="text-base text-gray-500">
+                Isi informasi untuk mendaftarkan lansia baru.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             FORM
+        ====================================================== -->
+
+        <form
+            action="{{ route('elderlies.store') }}"
+            method="POST"
+            class="p-6 space-y-8"
+            autocomplete="off"
+        >
+
+            @csrf
+
+
+            <!-- =================================================
+                 IDENTITAS DIRI
+            ================================================== -->
+
+            <div class="space-y-4">
+
+                <h3
+                    class="text-sm font-semibold text-teal-700 uppercase
+                           tracking-wider border-b border-gray-100 pb-2"
+                >
+                    Identitas Diri
+                </h3>
+
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+
+                    <!-- =================================================
+                         NAMA
+                    ================================================== -->
+
+                    <div class="w-full">
+
+                        <label
+                            for="name"
+                            class="block text-base font-medium
+                                   text-gray-700 mb-1"
+                        >
+                            Nama Lengkap
+                            <span class="text-red-500">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            value="{{ old('name') }}"
+                            required
+                            class="block w-full rounded-lg
+                                   border-gray-200 bg-gray-50
+                                   text-gray-900
+                                   focus:bg-white focus:border-teal-500
+                                   focus:ring-teal-500 shadow-sm
+                                   sm:text-base p-2.5 transition-all
+                                   @error('name')
+                                       border-red-500 bg-red-50
+                                   @enderror"
+                            placeholder="Contoh: Budi Santoso"
+                        >
+
+                        @error('name')
+                            <p class="mt-1 text-base text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+
+                    <!-- =================================================
+                         NIK
+                    ================================================== -->
+
+                    <div class="w-full">
+
+                        <label
+                            for="identity_number"
+                            class="block text-base font-medium
+                                   text-gray-700 mb-1"
+                        >
+                            NIK
+                            <span class="text-red-500">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="identity_number"
+                            id="identity_number"
+                            value="{{ old('identity_number') }}"
+                            required
+                            class="block w-full rounded-lg
+                                   border-gray-200 bg-gray-50
+                                   text-gray-900
+                                   focus:bg-white focus:border-teal-500
+                                   focus:ring-teal-500 shadow-sm
+                                   sm:text-base p-2.5 transition-all
+                                   @error('identity_number')
+                                       border-red-500 bg-red-50
+                                   @enderror"
+                            placeholder="16 digit NIK"
+                        >
+
+                        @error('identity_number')
+                            <p class="mt-1 text-base text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+
+                    <!-- =================================================
+                         JENIS KELAMIN
+                    ================================================== -->
+
+                    <div class="w-full">
+
+                        <label
+                            for="gender"
+                            class="block text-base font-medium
+                                   text-gray-700 mb-1"
+                        >
+                            Jenis Kelamin
+                            <span class="text-red-500">*</span>
+                        </label>
+
+                        <select
+                            name="gender"
+                            id="gender"
+                            required
+                            class="block w-full rounded-lg
+                                   border-gray-200 bg-gray-50
+                                   text-gray-900
+                                   focus:bg-white focus:border-teal-500
+                                   focus:ring-teal-500 shadow-sm
+                                   sm:text-base p-2.5 transition-all
+                                   @error('gender')
+                                       border-red-500 bg-red-50
+                                   @enderror"
+                        >
+
+                            <option value="">
+                                Pilih Jenis Kelamin
+                            </option>
+
+                            <option
+                                value="male"
+                                {{ old('gender') == 'male' ? 'selected' : '' }}
+                            >
+                                Laki-laki
+                            </option>
+
+                            <option
+                                value="female"
+                                {{ old('gender') == 'female' ? 'selected' : '' }}
+                            >
+                                Perempuan
+                            </option>
+
+                        </select>
+
+                        @error('gender')
+                            <p class="mt-1 text-base text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+
+                    <!-- =================================================
+                         TEMPAT LAHIR
+                    ================================================== -->
+
+                    <div class="w-full">
+
+                        <label
+                            for="birth_place"
+                            class="block text-base font-medium
+                                   text-gray-700 mb-1"
+                        >
+                            Tempat Lahir
+                        </label>
+
+                        <input
+                            type="text"
+                            name="birth_place"
+                            id="birth_place"
+                            value="{{ old('birth_place') }}"
+                            class="block w-full rounded-lg
+                                   border-gray-200 bg-gray-50
+                                   text-gray-900
+                                   focus:bg-white focus:border-teal-500
+                                   focus:ring-teal-500 shadow-sm
+                                   sm:text-base p-2.5 transition-all
+                                   @error('birth_place')
+                                       border-red-500 bg-red-50
+                                   @enderror"
+                            placeholder="Kota Kelahiran"
+                        >
+
+                        @error('birth_place')
+                            <p class="mt-1 text-base text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+
+                    <!-- =================================================
+                         TANGGAL LAHIR
+                    ================================================== -->
+
+                    <div class="w-full">
+
+                        <label
+                            for="birth_date"
+                            class="block text-base font-medium
+                                   text-gray-700 mb-1"
+                        >
+                            Tanggal Lahir
+                            <span class="text-red-500">*</span>
+                        </label>
+
+                        <input
+                            type="date"
+                            name="birth_date"
+                            id="birth_date"
+                            value="{{ old('birth_date') }}"
+                            required
+                            class="block w-full rounded-lg
+                                   border-gray-200 bg-gray-50
+                                   text-gray-900
+                                   focus:bg-white focus:border-teal-500
+                                   focus:ring-teal-500 shadow-sm
+                                   sm:text-base p-2.5 transition-all
+                                   @error('birth_date')
+                                       border-red-500 bg-red-50
+                                   @enderror"
+                        >
+
+                        @error('birth_date')
+                            <p class="mt-1 text-base text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+
+                    <!-- =================================================
+                         GOLONGAN DARAH
+                    ================================================== -->
+
+                    <div class="w-full">
+
+                        <label
+                            for="blood_type"
+                            class="block text-base font-medium
+                                   text-gray-700 mb-1"
+                        >
+                            Golongan Darah
+                        </label>
+
+                        <select
+                            name="blood_type"
+                            id="blood_type"
+                            class="block w-full rounded-lg
+                                   border-gray-200 bg-gray-50
+                                   text-gray-900
+                                   focus:bg-white focus:border-teal-500
+                                   focus:ring-teal-500 shadow-sm
+                                   sm:text-base p-2.5 transition-all
+                                   @error('blood_type')
+                                       border-red-500 bg-red-50
+                                   @enderror"
+                        >
+
+                            <option value="">
+                                Pilih Golongan Darah
+                            </option>
+
+                            @foreach (['A', 'B', 'AB', 'O'] as $blood)
+
+                                <option
+                                    value="{{ $blood }}"
+                                    {{ old('blood_type') == $blood ? 'selected' : '' }}
+                                >
+                                    {{ $blood }}
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                        @error('blood_type')
+                            <p class="mt-1 text-base text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+
+                    <!-- =================================================
+                         NOMOR TELEPON
+                    ================================================== -->
+
+                    <div class="w-full">
+
+                        <label
+                            for="phone_number"
+                            class="block text-base font-medium
+                                   text-gray-700 mb-1"
+                        >
+                            Nomor Telepon
+                        </label>
+
+                        <input
+                            type="text"
+                            name="phone_number"
+                            id="phone_number"
+                            value="{{ old('phone_number') }}"
+                            class="block w-full rounded-lg
+                                   border-gray-200 bg-gray-50
+                                   text-gray-900
+                                   focus:bg-white focus:border-teal-500
+                                   focus:ring-teal-500 shadow-sm
+                                   sm:text-base p-2.5 transition-all
+                                   @error('phone_number')
+                                       border-red-500 bg-red-50
+                                   @enderror"
+                            placeholder="Contoh: 08123456789"
+                        >
+
+                        @error('phone_number')
+                            <p class="mt-1 text-base text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+
+                    <!-- =================================================
+                         BPJS
+                    ================================================== -->
+
+                    <div class="w-full">
+
+                        <label
+                            for="social_security_number"
+                            class="block text-base font-medium
+                                   text-gray-700 mb-1"
+                        >
+                            No. BPJS/KIS
+                        </label>
+
+                        <input
+                            type="text"
+                            name="social_security_number"
+                            id="social_security_number"
+                            value="{{ old('social_security_number') }}"
+                            class="block w-full rounded-lg
+                                   border-gray-200 bg-gray-50
+                                   text-gray-900
+                                   focus:bg-white focus:border-teal-500
+                                   focus:ring-teal-500 shadow-sm
+                                   sm:text-base p-2.5 transition-all
+                                   @error('social_security_number')
+                                       border-red-500 bg-red-50
+                                   @enderror"
+                            placeholder="Nomor BPJS Kesehatan"
+                        >
+
+                        @error('social_security_number')
+                            <p class="mt-1 text-base text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+
+                    <!-- =================================================
+                         FASKES
+                    ================================================== -->
+
+                    <div class="w-full">
+
+                        <label
+                            for="health_facility"
+                            class="block text-base font-medium
+                                   text-gray-700 mb-1"
+                        >
+                            Faskes (BPJS)
+                        </label>
+
+                        <select
+                            name="health_facility"
+                            id="health_facility"
+                            class="block w-full rounded-lg
+                                   border-gray-200 bg-gray-50
+                                   text-gray-900
+                                   focus:bg-white focus:border-teal-500
+                                   focus:ring-teal-500 shadow-sm
+                                   sm:text-base p-2.5 transition-all
+                                   @error('health_facility')
+                                       border-red-500 bg-red-50
+                                   @enderror"
+                        >
+
+                            <option value="">
+                                Pilih Faskes
+                            </option>
+
+                            <option
+                                value="Klinik"
+                                {{ old('health_facility') == 'Klinik' ? 'selected' : '' }}
+                            >
+                                Klinik
+                            </option>
+
+                            <option
+                                value="Puskesmas"
+                                {{ old('health_facility') == 'Puskesmas' ? 'selected' : '' }}
+                            >
+                                Puskesmas
+                            </option>
+
+                            <option
+                                value="RS"
+                                {{ old('health_facility') == 'RS' ? 'selected' : '' }}
+                            >
+                                RS
+                            </option>
+
+                        </select>
+
+                        @error('health_facility')
+                            <p class="mt-1 text-base text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+
+                    <!-- =================================================
+                         SUHU TUBUH
+                    ================================================== -->
+
+                    <div class="w-full">
+
+                        <label
+                            for="temperature"
+                            class="block text-sm font-medium
+                                   text-gray-700 mb-1"
+                        >
+                            Suhu Tubuh (°C)
+                            <span class="text-xs text-gray-500">
+                                (Opsional)
+                            </span>
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.1"
+                            name="temperature"
+                            id="temperature"
+                            value="{{ old('temperature') }}"
+                            class="block w-full rounded-lg
+                                   border-gray-200 bg-gray-50
+                                   text-gray-900
+                                   focus:bg-white focus:border-teal-500
+                                   focus:ring-teal-500 shadow-sm
+                                   sm:text-sm p-2.5 transition-all
+                                   @error('temperature')
+                                       border-red-500 bg-red-50
+                                   @enderror"
+                            placeholder="Contoh: 36.5"
+                        >
+
+
+                        <!-- STATUS SUHU -->
+
+                        <div class="mt-2">
+
+                            <span
+                                id="suhuStatusBadge"
+                                class="hidden inline-flex items-center
+                                       px-2.5 py-1 rounded-full
+                                       text-xs font-semibold"
+                            ></span>
+
+                        </div>
+
+
+                        <!-- KONTROL TERMOMETER -->
+
+                        <div
+                            class="flex flex-wrap
+                                   items-center gap-2 mt-3"
+                        >
+
+                            <button
+                                type="button"
+                                id="connectThermometerButton"
+                                class="px-3 py-2 text-sm font-medium
+                                       text-white bg-teal-600
+                                       rounded-lg hover:bg-teal-700
+                                       transition-all"
+                            >
+                                Hubungkan Termometer
+                            </button>
+
+
+                            <button
+                                type="button"
+                                id="disconnectThermometerButton"
+                                class="hidden px-3 py-2 text-sm font-medium
+                                       text-white bg-red-600
+                                       rounded-lg hover:bg-red-700
+                                       transition-all"
+                            >
+                                Putuskan Termometer
+                            </button>
+
+
+                            <span
+                                id="thermometerStatus"
+                                class="text-sm text-gray-500"
+                            >
+                                Termometer belum terhubung
+                            </span>
+
+                        </div>
+
+
+                        @error('temperature')
+                            <p class="mt-1 text-sm text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+
+                    <!-- =================================================
+                         TENSIMETER YUWELL BP-YE670CR
+                         POLA SAMA DENGAN CREATE MOTHER
+                    ================================================== -->
+
+                    <div class="w-full md:col-span-2">
+
+                        <div
+                            class="rounded-xl border border-gray-200
+                                   bg-gray-50 p-5"
+                        >
+
+                            <!-- HEADER -->
+
+                            <div
+                                class="flex flex-col sm:flex-row
+                                       sm:items-center
+                                       sm:justify-between
+                                       gap-3 mb-5"
+                            >
+
+                                <div>
+
+                                    <h3
+                                        class="text-base font-bold
+                                               text-gray-800"
+                                    >
+                                        Tekanan Darah & Nadi
+                                    </h3>
+
+                                    <p
+                                        class="text-sm text-gray-500 mt-1"
+                                    >
+                                        Yuwell BP-YE670CR
+                                    </p>
+
+                                </div>
+
+
+                                <!-- STATUS BADGE -->
+
+                                <span
+                                    id="tensiStatusBadge"
+                                    class="hidden inline-flex
+                                           items-center
+                                           px-3 py-1.5 rounded-full
+                                           text-xs font-semibold"
+                                ></span>
+
+                            </div>
+
+
+                            <!-- =================================================
+                                 MEASUREMENT CARDS
+                            ================================================== -->
+
+                            <div
+                                class="grid grid-cols-1
+                                       sm:grid-cols-3 gap-4"
+                            >
+
+
+                                <!-- SYS -->
+
+                                <div
+                                    class="bg-white rounded-lg
+                                           border border-gray-200
+                                           p-4"
+                                >
+
+                                    <label
+                                        for="systolic_pressure"
+                                        class="block text-sm
+                                               font-medium
+                                               text-gray-500 mb-2"
+                                    >
+                                        Sistol
+                                    </label>
+
+                                    <div
+                                        class="flex items-end gap-2"
+                                    >
+
+                                        <input
+                                            type="number"
+                                            name="systolic_pressure"
+                                            id="systolic_pressure"
+                                            value="{{ old('systolic_pressure') }}"
+                                            class="w-full border-0
+                                                   border-b-2
+                                                   border-gray-200
+                                                   bg-transparent
+                                                   text-2xl font-bold
+                                                   text-gray-800
+                                                   p-0 pb-1
+                                                   focus:border-teal-500
+                                                   focus:ring-0"
+                                            placeholder="--"
+                                        >
+
+                                        <span
+                                            class="text-sm text-gray-400
+                                                   pb-1"
+                                        >
+                                            mmHg
+                                        </span>
+
+                                    </div>
+
+
+                                    @error('systolic_pressure')
+
+                                        <p
+                                            class="mt-1 text-sm
+                                                   text-red-600"
+                                        >
+                                            {{ $message }}
+                                        </p>
+
+                                    @enderror
+
+                                </div>
+
+
+                                <!-- DIA -->
+
+                                <div
+                                    class="bg-white rounded-lg
+                                           border border-gray-200
+                                           p-4"
+                                >
+
+                                    <label
+                                        for="diastolic_pressure"
+                                        class="block text-sm
+                                               font-medium
+                                               text-gray-500 mb-2"
+                                    >
+                                        Diastol
+                                    </label>
+
+                                    <div
+                                        class="flex items-end gap-2"
+                                    >
+
+                                        <input
+                                            type="number"
+                                            name="diastolic_pressure"
+                                            id="diastolic_pressure"
+                                            value="{{ old('diastolic_pressure') }}"
+                                            class="w-full border-0
+                                                   border-b-2
+                                                   border-gray-200
+                                                   bg-transparent
+                                                   text-2xl font-bold
+                                                   text-gray-800
+                                                   p-0 pb-1
+                                                   focus:border-teal-500
+                                                   focus:ring-0"
+                                            placeholder="--"
+                                        >
+
+                                        <span
+                                            class="text-sm text-gray-400
+                                                   pb-1"
+                                        >
+                                            mmHg
+                                        </span>
+
+                                    </div>
+
+
+                                    @error('diastolic_pressure')
+
+                                        <p
+                                            class="mt-1 text-sm
+                                                   text-red-600"
+                                        >
+                                            {{ $message }}
+                                        </p>
+
+                                    @enderror
+
+                                </div>
+
+
+                                <!-- PULSE -->
+
+                                <div
+                                    class="bg-white rounded-lg
+                                           border border-gray-200
+                                           p-4"
+                                >
+
+                                    <label
+                                        for="pulse"
+                                        class="block text-sm
+                                               font-medium
+                                               text-gray-500 mb-2"
+                                    >
+                                        Nadi
+                                    </label>
+
+                                    <div
+                                        class="flex items-end gap-2"
+                                    >
+
+                                        <input
+                                            type="number"
+                                            name="pulse"
+                                            id="pulse"
+                                            value="{{ old('pulse') }}"
+                                            class="w-full border-0
+                                                   border-b-2
+                                                   border-gray-200
+                                                   bg-transparent
+                                                   text-2xl font-bold
+                                                   text-gray-800
+                                                   p-0 pb-1
+                                                   focus:border-teal-500
+                                                   focus:ring-0"
+                                            placeholder="--"
+                                        >
+
+                                        <span
+                                            class="text-sm text-gray-400
+                                                   pb-1"
+                                        >
+                                            bpm
+                                        </span>
+
+                                    </div>
+
+
+                                    @error('pulse')
+
+                                        <p
+                                            class="mt-1 text-sm
+                                                   text-red-600"
+                                        >
+                                            {{ $message }}
+                                        </p>
+
+                                    @enderror
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =================================================
+                                 CONNECTION CONTROLS
+                            ================================================== -->
+
+                            <div
+                                class="flex flex-wrap
+                                       items-center gap-3 mt-5"
+                            >
+
+
+                                <!-- CONNECT YUWELL -->
+
+                                <button
+                                    type="button"
+                                    id="connectYuwellButton"
+                                    class="inline-flex items-center
+                                           gap-2 px-4 py-2.5
+                                           text-sm font-semibold
+                                           text-white bg-teal-600
+                                           rounded-lg
+                                           hover:bg-teal-700
+                                           active:bg-teal-800
+                                           transition-all
+                                           shadow-sm"
+                                >
+
+                                    <svg
+                                        class="w-4 h-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M8.5 12a3.5 3.5 0 017 0m-9.5 0a6 6 0 0012 0m-15 0a9 9 0 0018 0"
+                                        />
+                                    </svg>
+
+                                    Hubungkan Tensimeter
+
+                                </button>
+
+
+                                <!-- DISCONNECT YUWELL -->
+
+                                <button
+                                    type="button"
+                                    id="disconnectYuwellButton"
+                                    class="hidden inline-flex
+                                           items-center gap-2
+                                           px-4 py-2.5
+                                           text-sm font-semibold
+                                           text-white bg-red-600
+                                           rounded-lg
+                                           hover:bg-red-700
+                                           active:bg-red-800
+                                           transition-all
+                                           shadow-sm"
+                                >
+
+                                    <svg
+                                        class="w-4 h-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M6 18L18 6M6 6l12-12"
+                                        />
+                                    </svg>
+
+                                    Putuskan Tensimeter
+
+                                </button>
+
+
+                                <!-- STATUS -->
+
+                                <span
+                                    id="tensiStatus"
+                                    class="text-sm text-gray-500"
+                                >
+                                    Tensimeter belum terhubung
+                                </span>
+
+                            </div>
+
+
+                            <!-- =================================================
+                                 INFORMATION
+                            ================================================== -->
+
+                            <div
+                                class="mt-4 p-3 rounded-lg
+                                       bg-blue-50 border
+                                       border-blue-100"
+                            >
+
+                                <div
+                                    class="flex items-start gap-2"
+                                >
+
+                                    <svg
+                                        class="w-5 h-5 text-blue-500
+                                               flex-shrink-0 mt-0.5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M13 16h-1v-4h-1m1-4h.01M12 21a9 9 0 100-18 9 9 0 000-18"
+                                        />
+                                    </svg>
+
+                                    <p
+                                        class="text-xs text-blue-700"
+                                    >
+                                        Hubungkan Yuwell BP-YE670CR
+                                        melalui Bluetooth. Setelah
+                                        perangkat terhubung, lakukan
+                                        pengukuran menggunakan tensimeter.
+                                        Hasil sistol, diastol, dan nadi
+                                        akan otomatis masuk ke form.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         ALAMAT
+                    ================================================== -->
+
+                    <div
+                        class="w-full md:col-span-2"
+                    >
+
+                        <label
+                            for="address"
+                            class="block text-base
+                                   font-medium text-gray-700 mb-1"
+                        >
+                            Alamat Lengkap
+                        </label>
+
+                        <textarea
+                            name="address"
+                            id="address"
+                            rows="3"
+                            class="block w-full rounded-lg
+                                   border-gray-200 bg-gray-50
+                                   text-gray-900
+                                   focus:bg-white
+                                   focus:border-teal-500
+                                   focus:ring-teal-500 shadow-sm
+                                   sm:text-base p-2.5 transition-all
+                                   @error('address')
+                                       border-red-500 bg-red-50
+                                   @enderror"
+                            placeholder="Alamat domisili lengkap..."
+                        >{{ old('address') }}</textarea>
+
+                        @error('address')
+
+                            <p class="mt-1 text-base text-red-600">
+                                {{ $message }}
+                            </p>
+
+                        @enderror
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <form action="{{ route('elderlies.store') }}" method="POST" class="p-6 space-y-8" autocomplete="off">
-                @csrf
 
-                <!-- Personal Identity Section -->
-                <div class="space-y-4">
-                    <h3
-                        class="text-base font-semibold text-teal-700 uppercase tracking-wider border-b border-gray-100 pb-2">
-                        Identitas Diri</h3>
+            <!-- =====================================================
+                 ACTIONS
+            ====================================================== -->
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Name Field -->
-                        <div class="w-full">
-                            <label for="name" class="block text-base font-medium text-gray-700 mb-1">Nama Lengkap <span
-                                    class="text-red-500">*</span></label>
-                            <input type="text" name="name" id="name" value="{{ old('name') }}" required
-                                class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('name') border-red-500 bg-red-50 @enderror"
-                                placeholder="Contoh: Budi Santoso">
-                            @error('name')
-                                <p class="mt-1 text-base text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+            <div
+                class="flex items-center justify-end
+                       space-x-3 pt-4
+                       border-t border-gray-100"
+            >
 
-                        <!-- Identity Number (NIK) Field -->
-                        <div class="w-full">
-                            <label for="identity_number" class="block text-base font-medium text-gray-700 mb-1">NIK <span
-                                    class="text-red-500">*</span></label>
-                            <input type="text" name="identity_number" id="identity_number"
-                                value="{{ old('identity_number') }}" required
-                                class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('identity_number') border-red-500 bg-red-50 @enderror"
-                                placeholder="16 digit NIK">
-                            @error('identity_number')
-                                <p class="mt-1 text-base text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                <a
+                    href="{{ route('elderlies.index') }}"
+                    class="px-4 py-2 bg-white
+                           border border-gray-200
+                           text-gray-700 text-base
+                           font-medium rounded-lg
+                           hover:bg-gray-50
+                           transition-colors"
+                >
+                    Batal
+                </a>
 
-                        <!-- Gender Field -->
-                        <div class="w-full">
-                            <label for="gender" class="block text-base font-medium text-gray-700 mb-1">Jenis Kelamin <span
-                                    class="text-red-500">*</span></label>
-                            <select name="gender" id="gender" required
-                                class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('gender') border-red-500 bg-red-50 @enderror">
-                                <option value="">Pilih Jenis Kelamin</option>
-                                <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Laki-laki</option>
-                                <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Perempuan</option>
-                            </select>
-                            @error('gender')
-                                <p class="mt-1 text-base text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
 
-                        <!-- Birth Place Field -->
-                        <div class="w-full">
-                            <label for="birth_place" class="block text-base font-medium text-gray-700 mb-1">Tempat
-                                Lahir</label>
-                            <input type="text" name="birth_place" id="birth_place" value="{{ old('birth_place') }}"
-                                class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('birth_place') border-red-500 bg-red-50 @enderror"
-                                placeholder="Kota Kelahiran">
-                            @error('birth_place')
-                                <p class="mt-1 text-base text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                <button
+                    type="submit"
+                    class="px-4 py-2
+                           bg-teal-600 hover:bg-teal-700
+                           text-white text-base
+                           font-medium rounded-lg
+                           shadow-sm transition-colors"
+                >
+                    Simpan Data
+                </button>
 
-                        <!-- Birth Date Field -->
-                        <div class="w-full">
-                            <label for="birth_date" class="block text-base font-medium text-gray-700 mb-1">Tanggal Lahir
-                                <span class="text-red-500">*</span></label>
-                            <input type="date" name="birth_date" id="birth_date" value="{{ old('birth_date') }}"
-                                required
-                                class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('birth_date') border-red-500 bg-red-50 @enderror">
-                            @error('birth_date')
-                                <p class="mt-1 text-base text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+            </div>
 
-                        <!-- Blood Type Field -->
-                        <div class="w-full">
-                            <label for="blood_type" class="block text-base font-medium text-gray-700 mb-1">Golongan
-                                Darah</label>
-                            <select name="blood_type" id="blood_type"
-                                class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('blood_type') border-red-500 bg-red-50 @enderror">
-                                <option value="">Pilih Golongan Darah</option>
-                                @foreach (['A', 'B', 'AB', 'O'] as $blood)
-                                    <option value="{{ $blood }}"
-                                        {{ old('blood_type') == $blood ? 'selected' : '' }}>{{ $blood }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('blood_type')
-                                <p class="mt-1 text-base text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+        </form>
 
-                        <!-- Temperature Field -->
-                        <div class="w-full">
-                            <label for="temperature" class="block text-sm font-medium text-gray-700 mb-1">
-                                Suhu Tubuh (°C) <span class="text-xs text-gray-500">(Opsional)</span>
-                            </label>
-                            <input type="number" step="0.1" name="temperature" id="temperature"
-                                value="{{ old('temperature') }}"
-                                class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-sm p-2.5 transition-all @error('temperature') border-red-500 bg-red-50 @enderror"
-                                placeholder="Contoh: 36.5">
-                            <span id="suhuStatusBadge" class="hidden"></span>
-
-                            <div class="flex flex-wrap items-center gap-2 mt-3">
-                                <button type="button" id="connectThermometerButton"
-                                    class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
-                                    Hubungkan Termometer
-                                </button>
-                                <button type="button" id="disconnectThermometerButton"
-                                    class="hidden px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all">
-                                    Putuskan Termometer
-                                </button>
-                                <span id="thermometerStatus" class="text-sm text-gray-500">
-                                    Termometer belum terhubung
-                                </span>
-                            </div>
-
-                            @error('temperature')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Blood Pressure Field -->
-                        <div class="w-full md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">
-                                Tekanan Darah &amp; Nadi <span class="text-xs text-gray-500">(Opsional)</span>
-                            </label>
-                            <div class="grid grid-cols-3 gap-3">
-                                <div>
-                                    <input type="number" name="systolic_pressure" id="systolic_pressure"
-                                        value="{{ old('systolic_pressure') }}"
-                                        class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-sm p-2.5 transition-all @error('systolic_pressure') border-red-500 bg-red-50 @enderror"
-                                        placeholder="Sistol (mmHg)">
-                                    @error('systolic_pressure')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div>
-                                    <input type="number" name="diastolic_pressure" id="diastolic_pressure"
-                                        value="{{ old('diastolic_pressure') }}"
-                                        class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-sm p-2.5 transition-all @error('diastolic_pressure') border-red-500 bg-red-50 @enderror"
-                                        placeholder="Diastol (mmHg)">
-                                    @error('diastolic_pressure')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div>
-                                    <input type="number" name="pulse" id="pulse" value="{{ old('pulse') }}"
-                                        class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-sm p-2.5 transition-all @error('pulse') border-red-500 bg-red-50 @enderror"
-                                        placeholder="Nadi (bpm)">
-                                    @error('pulse')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <span id="tensiStatusBadge" class="hidden"></span>
-
-                            <div class="flex flex-wrap items-center gap-2 mt-3">
-                                <button type="button" id="ambilTensiButton"
-                                    class="px-3 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all">
-                                    Ambil dari Tensimeter
-                                </button>
-                                <span id="tensiStatus" class="text-sm text-gray-500">
-                                    Belum ada data diambil
-                                </span>
-                            </div>
-                            <p class="mt-2 text-xs text-gray-400">
-                                Ukur tensi di alat, jalankan <code>tensimeter_bridge.py</code> di komputer, baru klik tombol
-                                di atas.
-                            </p>
-                        </div>
-
-                        <!-- Phone Number Field -->
-                        <div class="w-full">
-                            <label for="phone_number" class="block text-base font-medium text-gray-700 mb-1">Nomor
-                                Telepon</label>
-                            <input type="text" name="phone_number" id="phone_number"
-                                value="{{ old('phone_number') }}"
-                                class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('phone_number') border-red-500 bg-red-50 @enderror"
-                                placeholder="Contoh: 08123456789">
-                            @error('phone_number')
-                                <p class="mt-1 text-base text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Social Security Number (BPJS) Field -->
-                        <div class="w-full">
-                            <label for="social_security_number" class="block text-base font-medium text-gray-700 mb-1">No.
-                                BPJS/KIS</label>
-                            <input type="text" name="social_security_number" id="social_security_number"
-                                value="{{ old('social_security_number') }}"
-                                class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('social_security_number') border-red-500 bg-red-50 @enderror"
-                                placeholder="Nomor BPJS Kesehatan">
-                            @error('social_security_number')
-                                <p class="mt-1 text-base text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Health Facility (Faskes) Field -->
-                        <div class="w-full">
-                            <label for="health_facility" class="block text-base font-medium text-gray-700 mb-1">Faskes
-                                (BPJS)</label>
-                            <select name="health_facility" id="health_facility"
-                                class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('health_facility') border-red-500 bg-red-50 @enderror">
-                                <option value="">Pilih Faskes</option>
-                                <option value="Klinik" {{ old('health_facility') == 'Klinik' ? 'selected' : '' }}>Klinik
-                                </option>
-                                <option value="Puskesmas" {{ old('health_facility') == 'Puskesmas' ? 'selected' : '' }}>
-                                    Puskesmas</option>
-                                <option value="RS" {{ old('health_facility') == 'RS' ? 'selected' : '' }}>RS</option>
-                            </select>
-                            @error('health_facility')
-                                <p class="mt-1 text-base text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Address Field -->
-                        <div class="w-full md:col-span-2">
-                            <label for="address" class="block text-base font-medium text-gray-700 mb-1">Alamat
-                                Lengkap</label>
-                            <textarea name="address" id="address" rows="3"
-                                class="block w-full rounded-lg border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:border-teal-500 focus:ring-teal-500 shadow-sm sm:text-base p-2.5 transition-all @error('address') border-red-500 bg-red-50 @enderror"
-                                placeholder="Alamat domisili lengkap...">{{ old('address') }}</textarea>
-                            @error('address')
-                                <p class="mt-1 text-base text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Actions -->
-                <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-100">
-                    <a href="{{ route('elderlies.index') }}"
-                        class="px-4 py-2 bg-white border border-gray-200 text-gray-700 text-base font-medium rounded-lg hover:bg-gray-50 transition-colors">
-                        Batal
-                    </a>
-                    <button type="submit"
-                        class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-base font-medium rounded-lg shadow-sm transition-colors">
-                        Simpan Data
-                    </button>
-                </div>
-            </form>
-        </div>
     </div>
+
+</div>
+```
+
 @endsection
 
-<script src="{{ asset('js/thermometer.js') }}?v={{ filemtime(public_path('js/thermometer.js')) }}" defer></script>
-<script src="{{ asset('js/tensimeter.js') }}?v={{ filemtime(public_path('js/tensimeter.js')) }}" defer></script>
-<script src="{{ asset('js/vital-status.js') }}?v={{ filemtime(public_path('js/vital-status.js')) }}" defer></script>
+<!-- ============================================================
+     JAVASCRIPT
+============================================================= -->
+
+<script
+    src="{{ asset('js/thermometer.js') }}?v={{ filemtime(public_path('js/thermometer.js')) }}"
+    defer
+></script>
+
+<script
+    src="{{ asset('js/tensimeter.js') }}?v={{ filemtime(public_path('js/tensimeter.js')) }}"
+    defer
+></script>
+
+<script
+    src="{{ asset('js/vital-status.js') }}?v={{ filemtime(public_path('js/vital-status.js')) }}"
+    defer
+></script>
