@@ -304,11 +304,14 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     @php
-                                        $ageInMonths = \Carbon\Carbon::parse($children->birth_date)->diffInMonths($record->checkup_date);
-                                    @endphp
-                                    <span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded text-sm font-semibold">
-                                        {{ $ageInMonths }} Bulan
-                                    </span>
+                                        $ageDiff = \Carbon\Carbon::parse($children->birth_date)->diff($record->checkup_date);
+                                        $ageLabel = $ageDiff->y > 0
+                                           ? $ageDiff->y . ' Tahun ' . $ageDiff->m . ' Bulan'
+                                            : $ageDiff->m . ' Bulan';
+                                            @endphp
+                                            <span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded text-sm font-semibold">
+                                               {{ $ageLabel }}
+                                            </span>
                                 </td>
                                 <td class="px-6 py-4 font-medium">{{ $record->weight }} kg</td>
                                 <td class="px-6 py-4 font-medium">{{ $record->height }} cm</td>
