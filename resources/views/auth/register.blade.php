@@ -9,6 +9,67 @@
 
     <form method="POST" action="{{ route('register') }}" autocomplete="off">
         @csrf
+        
+        <!-- Tipe Registrasi -->
+        <div class="mb-6" x-data="{ type: '{{ old('registration_type', 'join') }}' }">
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <label class="cursor-pointer">
+                    <input type="radio" name="registration_type" value="join" x-model="type" class="sr-only" checked>
+                    <div class="text-center py-3 rounded-md border text-xs font-bold uppercase tracking-wider"
+                        :class="type === 'join' ? 'border-gray-800 bg-gray-800 text-white' : 'border-gray-200 text-gray-500'">
+                        Gabung Posyandu
+                    </div>
+                </label>
+                <label class="cursor-pointer">
+                    <input type="radio" name="registration_type" value="new_posyandu" x-model="type" class="sr-only">
+                    <div class="text-center py-3 rounded-md border text-xs font-bold uppercase tracking-wider"
+                        :class="type === 'new_posyandu' ? 'border-gray-800 bg-gray-800 text-white' : 'border-gray-200 text-gray-500'">
+                        Daftarkan Posyandu Baru
+                    </div>
+                </label>
+            </div>
+
+            <!-- Pilih Posyandu (jika Gabung) -->
+            <div x-show="type === 'join'" class="mb-6">
+                <select name="health_post_id"
+                    class="block w-full rounded-md border-gray-100 bg-gray-100/50 py-4 px-6 text-gray-900 focus:bg-white focus:border-gray-300 focus:ring-0 shadow-xs @error('health_post_id') border-red-500 @enderror">
+                    <option value="">-- Pilih Posyandu --</option>
+                    @foreach ($healthPosts as $hp)
+                        <option value="{{ $hp->id }}" @selected(old('health_post_id') == $hp->id)>{{ $hp->name }}</option>
+                    @endforeach
+                </select>
+                @error('health_post_id')
+                    <p class="mt-2 text-sm text-red-600 pl-4">{{ $message }}</p>
+                @enderror
+                <p class="mt-2 text-xs text-gray-500 pl-4">Akun Anda akan berstatus Anggota Kader dan menunggu persetujuan Ketua Kader posyandu tersebut.</p>
+            </div>
+
+            <!-- Data Posyandu Baru (jika Daftar Baru) -->
+            <div x-show="type === 'new_posyandu'" class="space-y-6 mb-6">
+                <div>
+                    <input type="text" name="posyandu_name" value="{{ old('posyandu_name') }}"
+                        class="block w-full rounded-md border-gray-100 bg-gray-100/50 py-4 px-6 text-gray-900 placeholder-gray-400 focus:bg-white focus:border-gray-300 focus:ring-0 shadow-xs @error('posyandu_name') border-red-500 @enderror"
+                        placeholder="Nama Posyandu (contoh: Posyandu Melati)">
+                    @error('posyandu_name')
+                        <p class="mt-2 text-sm text-red-600 pl-4">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
+                    <input type="text" name="posyandu_address" value="{{ old('posyandu_address') }}"
+                        class="block w-full rounded-md border-gray-100 bg-gray-100/50 py-4 px-6 text-gray-900 placeholder-gray-400 focus:bg-white focus:border-gray-300 focus:ring-0 shadow-xs @error('posyandu_address') border-red-500 @enderror"
+                        placeholder="Alamat Posyandu">
+                    @error('posyandu_address')
+                        <p class="mt-2 text-sm text-red-600 pl-4">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
+                    <input type="text" name="posyandu_phone" value="{{ old('posyandu_phone') }}"
+                        class="block w-full rounded-md border-gray-100 bg-gray-100/50 py-4 px-6 text-gray-900 placeholder-gray-400 focus:bg-white focus:border-gray-300 focus:ring-0 shadow-xs"
+                        placeholder="Telepon Posyandu (opsional)">
+                </div>
+                <p class="text-xs text-gray-500 pl-4">Anda akan menjadi Ketua Kader (admin) untuk Posyandu ini.</p>
+            </div>
+        </div>
 
         <!-- Name -->
         <div class="mb-6 relative">

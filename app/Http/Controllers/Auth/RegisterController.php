@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\HealthPost;
+use App\Models\Staff;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -10,57 +12,45 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
 
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
     protected $redirectTo = '/';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest');
     }
 
     /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * Tampilkan form registrasi beserta daftar posyandu yang sudah ada.
      */
+    public function showRegistrationForm()
+    {
+        $healthPosts = HealthPost::orderBy('name')->get();
+
+        return view('auth.register', compact('healthPosts'));
+    }
+
     protected function validator(array $data)
     {
-        return Validator::make($data, [
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+            'registration_type' => ['required', 'in:join,new_posyandu'],
+        ];
+
+        if (($data['registration_type'] ?? null) === 'new_posyandu') {
+            $rules['posyandu_name'] = ['required', 'string', 'max:255'];
+            $rules['posyandu_address'] = ['required', 'string', 'max:255'];
+            $rules['posyandu_phone'] = ['nullable', 'string', 'max:20'];
+        } else {
+            $rules['health_post_id'] = ['required', 'exists:health_posts,id'];
+        }
+
+        return Validator::make($data, $rules);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
     protected function create(array $data)
     {
         $user = User::create([
@@ -69,16 +59,29 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        // Automatically assign as 'anggota-kader' and pending status
-        // Assign to first Health Post found or default to 1
-        $healthPostId = \App\Models\HealthPost::first()->id ?? 1;
+        if (($data['registration_type'] ?? null) === 'new_posyandu') {
+            // Mendaftarkan Posyandu baru -> pendaftar langsung jadi Ketua Kader aktif
+            $healthPost = HealthPost::create([
+                'name' => $data['posyandu_name'],
+                'address' => $data['posyandu_address'],
+                'phone' => $data['posyandu_phone'] ?? null,
+            ]);
 
-        \App\Models\Staff::create([
-            'user_id' => $user->id,
-            'health_post_id' => $healthPostId,
-            'role' => 'anggota-kader',
-            'status' => 'pending',
-        ]);
+            Staff::create([
+                'user_id' => $user->id,
+                'health_post_id' => $healthPost->id,
+                'role' => 'ketua-kader',
+                'status' => 'active',
+            ]);
+        } else {
+            // Bergabung ke Posyandu yang sudah ada -> jadi Anggota Kader, menunggu approval Ketua Kader
+            Staff::create([
+                'user_id' => $user->id,
+                'health_post_id' => $data['health_post_id'],
+                'role' => 'anggota-kader',
+                'status' => 'pending',
+            ]);
+        }
 
         return $user;
     }

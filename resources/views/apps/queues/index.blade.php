@@ -19,7 +19,7 @@
                     </svg>
                     Buka Layar Monitor
                 </a>
-                <a href="{{ route('queues.public.index') }}" target="_blank"
+                                <a href="{{ route('public.landing') }}" target="_blank"
                     class="inline-flex items-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-base font-medium rounded-lg shadow-sm">
                     <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />

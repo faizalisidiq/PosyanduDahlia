@@ -15,9 +15,10 @@ class StaffController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+        public function index(Request $request)
     {
         $staffs = Staff::with(['user', 'healthPost'])
+            ->where('health_post_id', $request->user()->staff->health_post_id)
             ->when($request->search, function ($query) use ($request) {
                 $query->whereHas('user', function ($q) use ($request) {
                     $q->where('name', 'like', "%{$request->search}%");
@@ -28,7 +29,7 @@ class StaffController extends Controller
 
         return view('apps.staffs.index', compact('staffs'));
     }
-
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -59,6 +60,7 @@ class StaffController extends Controller
                 }
 
                 $data['status'] = 'active';
+                $data['health_post_id'] = $request->user()->staff->health_post_id;
                 $staff = Staff::make($data);
                 $staff->user()->associate($user);
                 $staff->saveOrFail();
@@ -116,6 +118,7 @@ class StaffController extends Controller
                     $data['avatar'] = Storage::disk('public')->putFile(Staff::AVATAR_PATH, $request->file('avatar'));
                 }
 
+                $data['health_post_id'] = $staff->health_post_id; // tidak boleh dipindah posyandu
                 $staff->fill($data);
                 $staff->saveOrFail();
 

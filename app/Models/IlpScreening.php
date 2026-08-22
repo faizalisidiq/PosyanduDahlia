@@ -11,6 +11,17 @@ class IlpScreening extends Model
     /** @use HasFactory<\Database\Factories\IlpScreeningFactory> */
     use HasFactory, SoftDeletes;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('health_post_via_relation', function (\Illuminate\Database\Eloquent\Builder $builder) {
+            if (\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Auth::user()->staff) {
+                $builder->whereHas('staff');
+            }
+        });
+    }
+
     /**
      * The attributes that are mass assignable.
      *

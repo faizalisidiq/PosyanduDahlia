@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Concerns\BelongsToHealthPost;
 
 class Elderly extends Model
 {
     /** @use HasFactory<\Database\Factories\ElderlyFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, BelongsToHealthPost;
 
     protected static function boot()
     {
@@ -30,6 +31,7 @@ class Elderly extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'health_post_id',
         'identity_number',
         'name',
         'gender',

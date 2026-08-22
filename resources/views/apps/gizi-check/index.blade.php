@@ -1,11 +1,11 @@
 @extends('layouts.auth')
 
-@section('title', 'Ambil Antrian')
+@section('title', 'Cek Gizi Anak')
 
 @section('content')
     <div class="mb-10 text-center md:text-left">
-        <h2 class="text-3xl font-bold text-gray-800 mb-2">Ambil Antrian</h2>
-        <p class="text-gray-500">Masukkan NIK Ibu untuk mengambil nomor antrian posyandu.</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">Cek Gizi & Pertumbuhan Anak</h2>
+        <p class="text-gray-500">Masukkan NIK Ibu untuk melihat perkembangan gizi dan pertumbuhan anak.</p>
     </div>
 
     @if (session('error'))
@@ -18,11 +18,10 @@
         </div>
     @endif
 
-    <form action="{{ route('queues.public.check') }}" method="POST">
+    <form action="{{ route('gizi.check') }}" method="POST">
         @csrf
         <div class="mb-6">
-            <label for="identity_number" class="block text-base font-medium text-gray-700 mb-2">Nomor Induk Kependudukan (NIK)
-                Ibu</label>
+            <label for="identity_number" class="block text-base font-medium text-gray-700 mb-2">Nomor Induk Kependudukan (NIK) Ibu</label>
             <input type="text" id="identity_number" name="identity_number"
                 class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
                 placeholder="Contoh: 3201234567890001" required value="{{ old('identity_number') }}" autofocus>

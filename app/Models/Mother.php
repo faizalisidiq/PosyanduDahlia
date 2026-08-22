@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Concerns\BelongsToHealthPost;
 
 class Mother extends Model
 {
     /** @use HasFactory<\Database\Factories\MotherFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, BelongsToHealthPost;
 
     protected static function boot()
     {
@@ -35,6 +36,7 @@ class Mother extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'health_post_id',
         'name',
         'husband_name',
         'identity_number',
