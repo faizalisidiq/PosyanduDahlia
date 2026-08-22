@@ -2,15 +2,28 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class ChildbirthRecord extends Model
 {
     /** @use HasFactory<\Database\Factories\ChildbirthRecordFactory> */
     use HasFactory, SoftDeletes;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('health_post_via_relation', function (Builder $builder) {
+            if (Auth::check() && Auth::user()->staff) {
+                $builder->whereHas('mother');
+            }
+        });
+    }
 
     /**
      * The attributes that are mass assignable.

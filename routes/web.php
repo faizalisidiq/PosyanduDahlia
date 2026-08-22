@@ -15,4 +15,5 @@ require __DIR__ . '/web/queues.php';
 require __DIR__ . '/web/schedules.php';
 require __DIR__ . '/web/settings.php';
 require __DIR__ . '/web/archives.php';
+require __DIR__ . '/web/gizi-check.php';
 

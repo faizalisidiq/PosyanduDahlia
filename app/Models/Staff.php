@@ -14,6 +14,24 @@ class Staff extends Model
 
     protected $table = 'staff';
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('health_post', function (\Illuminate\Database\Eloquent\Builder $builder) {
+            if (\Illuminate\Support\Facades\Auth::check()) {
+                // Pakai query mentah (bukan Eloquent) supaya tidak memicu scope ini lagi (hindari infinite loop)
+                $healthPostId = \Illuminate\Support\Facades\DB::table('staff')
+                    ->where('user_id', \Illuminate\Support\Facades\Auth::id())
+                    ->value('health_post_id');
+
+                if ($healthPostId) {
+                    $builder->where('staff.health_post_id', $healthPostId);
+                }
+            }
+        });
+    }
+
     const AVATAR_PATH = 'staff';
 
     /**

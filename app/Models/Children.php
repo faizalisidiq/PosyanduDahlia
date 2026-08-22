@@ -13,9 +13,15 @@ class Children extends Model
     /** @use HasFactory<\Database\Factories\ChildrenFactory> */
     use HasFactory, SoftDeletes;
 
-    protected static function boot()
+        protected static function boot()
     {
         parent::boot();
+
+        static::addGlobalScope('health_post_via_relation', function (\Illuminate\Database\Eloquent\Builder $builder) {
+            if (\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Auth::user()->staff) {
+                $builder->whereHas('mother');
+            }
+        });
 
         static::deleted(function ($child) {
             $child->growthMonitorings()->delete();

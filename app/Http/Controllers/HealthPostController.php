@@ -12,9 +12,10 @@ class HealthPostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+        public function index(Request $request)
     {
         $healthPosts = HealthPost::withCount('staffs')
+            ->where('id', $request->user()->staff->health_post_id)
             ->when($request->search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
@@ -51,8 +52,10 @@ class HealthPostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(HealthPost $healthPost)
+        public function show(Request $request, HealthPost $healthPost)
     {
+        abort_unless($healthPost->id === $request->user()->staff->health_post_id, 403);
+
         $healthPost->loadCount('staffs');
         return view('apps.health-posts.show', compact('healthPost'));
     }
@@ -60,8 +63,10 @@ class HealthPostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HealthPost $healthPost)
+    public function edit(Request $request, HealthPost $healthPost)
     {
+        abort_unless($healthPost->id === $request->user()->staff->health_post_id, 403);
+
         return view('apps.health-posts.edit', compact('healthPost'));
     }
 
@@ -70,6 +75,8 @@ class HealthPostController extends Controller
      */
     public function update(UpdateHealthPostRequest $request, HealthPost $healthPost)
     {
+        abort_unless($healthPost->id === $request->user()->staff->health_post_id, 403);
+
         try {
             $data = $request->validated();
 
@@ -85,8 +92,10 @@ class HealthPostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HealthPost $healthPost)
+    public function destroy(Request $request, HealthPost $healthPost)
     {
+        abort_unless($healthPost->id === $request->user()->staff->health_post_id, 403);
+
         // Check for associated staff
         if ($healthPost->staffs()->count() > 0) {
             return redirect()->back()->with('error', 'Gagal menghapus posyandu. Masih terdapat petugas yang terdaftar di posyandu ini. Silakan pindahkan atau hapus petugas terlebih dahulu.');
